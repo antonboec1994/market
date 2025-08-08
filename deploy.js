@@ -2,7 +2,7 @@ const http = require('http');
 const { exec } = require('child_process');
 const crypto = require('crypto');
 
-// Настройки
+// Настройки для market
 const PORT = 3004;
 const WEBHOOK_SECRET = 'supersecrettoken123'; // Должен совпадать с GitHub
 const REPO_DIR = '/root/market';
