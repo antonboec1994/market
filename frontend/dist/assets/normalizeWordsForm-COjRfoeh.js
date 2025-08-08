@@ -1,0 +1,1 @@
+const a=t=>{t=Math.abs(t);let o=[" товар"," товара"," товаров"];if(Number.isInteger(t)){let s=[2,0,1,1,1,2];return o[t%100>4&&t%100<20?2:s[t%10<5?t%10:5]]}return o[1]},i=t=>{t=Math.abs(t);let o=[" отзыв"," отзыва"," отзывов"];if(Number.isInteger(t)){let s=[2,0,1,1,1,2];return o[t%100>4&&t%100<20?2:s[t%10<5?t%10:5]]}return o[1]};export{a,i as n};

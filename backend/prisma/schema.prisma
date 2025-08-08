@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        Int         @id @default(autoincrement())
+  name      String
+  login     String
+  email     String      @unique()
+  password  String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  feedbacks Feedbacks[]
+  cart      Cart[]
+}
+
+model Feedbacks {
+  id              Int    @id @default(autoincrement())
+  productId       Int
+  date            String
+  time            String
+  rating          Float
+  userId          Int
+  userEmail       String
+  userName        String
+  feedbackMessage String
+  users           Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Cart {
+  id                    Int    @id @default(autoincrement())
+  productId             Int
+  imageUrl              String
+  name                  String
+  price                 Float
+  salePrice             Float
+  count                 Float
+  currentTotalPrice     Float
+  currentTotalSalePrice Float
+  userId                Int
+  users                 Users  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([productId, userId])
+}
+
+model Products {
+  id          Int      @id @default(autoincrement())
+  imageUrl    String
+  name        String
+  art         String
+  rating      Float
+  price       Float
+  salePrice   Float
+  inStock     Boolean
+  category    Int
+  slides      Json
+  description String
+  featured    Boolean?
+  color       String
+  saveImage   String?
+  hotImage    String?
+  recommend   Boolean?
+  saler       Boolean?
+  bestRating  Boolean?
+  salehit     Boolean?
+}
+
+model Showroom {
+  id     Int    @id @default(autoincrement())
+  name   String
+  slides Json
+}
+
+model Blog {
+  id          Int    @id @default(autoincrement())
+  imageUrl    String
+  title       String
+  date        String
+  description String
+}
+
+model Graphics {
+  id            Int             @id @default(autoincrement())
+  name          String
+  values        Json
+  GraphicValues GraphicValues[]
+}
+
+model GraphicValues {
+  id        Int      @id @default(autoincrement())
+  timestamp Int
+  price     Float
+  salePrice Float
+  graphicId Int
+  graphic   Graphics @relation(fields: [graphicId], references: [id])
+}

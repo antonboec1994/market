@@ -1,0 +1,59 @@
+.banner_top__inner {
+	min-height: 197px;
+	text-align: center;
+	padding: 60px 20px;
+	background: radial-gradient(
+		circle,
+		rgba(36, 0, 1, 1) 0%,
+		rgba(168, 85, 12, 1) 49%,
+		rgba(108, 45, 11, 1) 100%
+	);
+}
+.banner_top__title {
+	color: #ffffff;
+	font-size: 54px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+.banner_top__title_span {
+	font-weight: 300;
+}
+.banner_top__text {
+	color: #ffffff;
+	font-size: 24px;
+	font-weight: 300;
+	text-transform: uppercase;
+	letter-spacing: 12.6px;
+}
+.banner_top__text_span {
+	color: #d58e32;
+	font-weight: 400;
+}
+
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 768px) {
+	.banner_top__text {
+		font-size: 17px;
+		letter-spacing: normal;
+	}
+	.banner_top__title {
+		font-size: 22px;
+	}
+	.banner_top__inner {
+		padding: 20px;
+	}
+}

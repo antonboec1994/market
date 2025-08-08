@@ -1,0 +1,94 @@
+.graphicBox {
+	border: 1px solid #d6d6d6;
+	padding: 20px;
+	width: 100%;
+	max-width: calc(100%);
+	margin: 15px;
+	box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+	min-height: 180px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.info {
+	margin-right: 20px;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+.name {
+	font-weight: 600;
+	font-size: 18px;
+	color: #2b2b2b;
+}
+.price {
+	font-weight: 700;
+	font-size: 26px;
+	line-height: 32px;
+	color: #2b2b2b;
+	margin-bottom: 15px;
+	margin-top: auto;
+	span {
+		font-weight: 400;
+		display: block;
+		font-size: 14px;
+		line-height: 16px;
+		color: #666666;
+	}
+}
+.salePrice {
+	font-size: 15px;
+	color: #535353;
+	span {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 3px 10px;
+		border-radius: 4px;
+		background-color: rgb(93, 196, 93);
+		margin-right: 10px;
+		color: #fff;
+	}
+	p {
+		display: block;
+	}
+	div {
+		display: flex;
+		align-items: center;
+		font-weight: 600;
+		font-size: 16px;
+	}
+}
+
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 768px) {
+	.info {
+		max-width: 100%;
+		width: 100%;
+		height: auto;
+		margin-right: 0;
+		margin-bottom: 30px;
+	}
+	.graphicBox {
+		padding: 10px;
+		flex-wrap: wrap;
+		canvas {
+			width: 100% !important;
+			max-height: 150px !important;
+		}
+	}
+}

@@ -1,0 +1,123 @@
+.slide {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	height: 480px;
+	&:hover {
+		.slide__info_links {
+			&::before {
+				width: 100%;
+			}
+		}
+	}
+	&.hidden {
+		display: none;
+	}
+}
+.slide__title {
+	background-color: #2a2a2a;
+	color: #ffffff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 20px;
+	font-weight: 400;
+	text-transform: uppercase;
+	padding: 18px 22px 18px 24px;
+}
+.slide__image {
+	height: 272px;
+	padding: 9px 28px 9px;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+.slide__circle {
+	width: 71px;
+	height: 71px;
+	padding: 5px;
+	background-color: #2a2a2a;
+	opacity: 0.8;
+	border-radius: 50%;
+	color: #ffffff;
+	font-family: 'Poppins', sans-serif;
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 20px;
+	text-transform: uppercase;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	margin-right: 6px;
+}
+.slide__circle_span {
+	font-size: 13px;
+}
+.slide__info {
+	background-color: #fff;
+	border: 1px solid #e2e2e2;
+	border-top: none;
+	padding: 17px 15px 18px;
+}
+.slide__info_title {
+	cursor: pointer;
+	color: $text;
+	font-family: 'Poppins', sans-serif;
+	font-weight: 600;
+	display: block;
+	text-align: center;
+	margin-bottom: 5px;
+	transition: all 0.3s;
+	font-size: 16px;
+	width: 100%;
+	max-width: 100%;
+	&:hover {
+		color: $orange-bg;
+	}
+}
+
+.slide__info_links {
+	border-top: 1px solid $text;
+	margin-top: 19px;
+	padding-top: 24px;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	&::before {
+		content: '';
+		position: absolute;
+		width: 30px;
+		height: 4px;
+		background-color: $orange;
+		top: -2px;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		transition: all 0.5s;
+	}
+}
+
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 768px) {
+	.slide__image {
+		height: 200px;
+	}
+}

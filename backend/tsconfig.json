@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2021",
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "declaration": false, // ❌ Отключает генерацию .d.ts
+    "sourceMap": false // ❌ Отключает генерацию .js.map
+  },
+  "exclude": [
+    "node_modules",
+    "dist" // ✅ Убедитесь, что dist не компилируется
+  ],
+  "include": [
+    "src" // ✅ Только src компилируется
+  ]
+}

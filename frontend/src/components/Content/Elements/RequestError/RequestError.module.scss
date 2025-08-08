@@ -1,0 +1,22 @@
+.message {
+	width: 100%;
+	margin: 10px auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: -moz-fit-content;
+	padding: 8px 15px;
+	color: #fff;
+	text-align: center;
+	border-radius: 4px;
+	font-size: 13px;
+	border: 1px solid transparent;
+}
+.error {
+	border-color: rgb(249, 80, 80);
+	color: rgb(249, 80, 80);
+}
+.success {
+	border-color: rgb(12, 133, 68);
+	color: rgb(12, 133, 68);
+}

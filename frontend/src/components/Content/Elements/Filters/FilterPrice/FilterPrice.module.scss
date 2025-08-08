@@ -1,0 +1,79 @@
+.aside_title {
+	color: $text;
+	font-size: 16px;
+	font-weight: 600;
+	text-transform: uppercase;
+	padding-bottom: 14px;
+	border-bottom: 1px solid $text;
+	margin-bottom: 30px;
+}
+.products__aside_price {
+	margin-bottom: 50px;
+}
+.products__price_button {
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: 400;
+	text-transform: uppercase;
+	padding: 11px 13px;
+	background-color: $orange;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	margin-top: 15px;
+	transition: all 0.3s;
+	&:hover {
+		color: $text;
+	}
+}
+.price_slider_box {
+	position: relative;
+	span {
+		color: #2a2a2a;
+		font-size: 14px;
+		font-weight: 500;
+		background-color: transparent;
+		height: 32px;
+		border: 1px solid #e1e1e1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 9px 15px;
+	}
+	.value0 {
+		position: absolute;
+		left: 0;
+		bottom: 0px;
+	}
+	.value1 {
+		position: absolute;
+		right: 0;
+		bottom: 0px;
+	}
+}
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 540px) {
+	.aside_title {
+		margin-bottom: 10px;
+	}
+	.products__aside_price {
+		margin-bottom: 20px;
+	}
+}

@@ -1,0 +1,60 @@
+.gallery__tabs_tabs {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	display: flex;
+	justify-content: center;
+	border-bottom: 1px solid #e2e2e2;
+}
+.gallery__tabs_tab_link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 13px;
+	font-weight: 600;
+	background-color: #fff;
+	color: $text;
+	cursor: pointer;
+	padding: 5px 35px;
+	transition: all 0.3s;
+	&:hover {
+		opacity: 0.7;
+	}
+}
+:global {
+	.Mui-selected {
+		border-color: $orange;
+		color: $orange !important;
+	}
+	.MuiTabs-indicator {
+		background-color: $orange !important;
+	}
+}
+.gallery__tabs_tab_content {
+	position: relative;
+	margin-top: 15px;
+}
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 768px) {
+	.gallery__tabs_tabs {
+		display: block;
+	}
+	.gallery__tabs_tab_link {
+		padding: 2px;
+		font-size: 8px;
+	}
+}

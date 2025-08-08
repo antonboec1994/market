@@ -1,0 +1,37 @@
+.products__reset {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 55px;
+	background-color: #eaeaea;
+	color: $text;
+	cursor: pointer;
+	width: fit-content;
+	margin-top: 100px;
+	width: 100%;
+	transition: all 0.3s;
+	&:hover {
+		opacity: 0.7;
+	}
+}
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 540px) {
+	.products__reset {
+		margin-top: 0;
+		margin-bottom: 20px;
+	}
+}

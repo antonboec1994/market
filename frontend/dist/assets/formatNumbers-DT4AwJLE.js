@@ -1,0 +1,1 @@
+const e=t=>{if(t!==void 0)return t?.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")};let r="0",a="0";const o=t=>{r=t[0]?.toString().replace(/\B(?=(\d{3})+(?!\d))/g," "),a=t[1]?.toString().replace(/\B(?=(\d{3})+(?!\d))/g," ")};export{o as a,a as b,e as f,r as l};

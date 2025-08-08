@@ -1,0 +1,121 @@
+.products__aside_featured {
+	margin-top: 100px;
+	margin-bottom: 100px;
+}
+.products__featured_title {
+	color: #ffffff;
+	font-size: 20px;
+	font-weight: 400;
+	text-transform: uppercase;
+	background-color: $text;
+	padding: 14px 128px;
+	text-align: center;
+	width: fit-content;
+	margin-left: auto;
+	margin-right: auto;
+}
+.products__featured_inner {
+	margin-top: 30px;
+	display: flex;
+}
+.products__featured_item {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	& + & {
+		margin-left: 25px;
+	}
+}
+.products__featured_image {
+	width: 100%;
+	max-width: 100%;
+	height: 158px;
+	img {
+		object-fit: contain;
+		width: 100%;
+		max-width: 100%;
+		height: 100%;
+		display: block;
+	}
+}
+.products__featured_info {
+	margin-top: 10px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.products__featured_name {
+	color: $text;
+	font-size: 14px;
+	font-weight: 600;
+	transition: all 0.3s;
+	text-align: center;
+	&:hover {
+		color: $orange;
+	}
+}
+.products__featured_price {
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 41px;
+	color: $text;
+	text-align: center;
+}
+.products__featured_rate {
+	margin-left: 0;
+}
+.products__featured_button {
+	color: #ffffff;
+	font-size: 13px;
+	font-weight: 400;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	text-transform: uppercase;
+	background-color: transparent;
+	border: 1px solid #2a2a2a;
+	color: #2a2a2a;
+	margin-top: 5px;
+	padding: 14px 13px 13px;
+	cursor: pointer;
+	transition: all 0.3s;
+	&:hover {
+		background-color: $orange;
+		color: #fff;
+		border-color: $orange;
+	}
+}
+
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 768px) {
+	.products__featured_button {
+		max-width: 50%;
+	}
+	.products__featured_item {
+		& + & {
+			margin-left: 0;
+			margin-top: 30px;
+		}
+	}
+	.products__featured_inner {
+		flex-wrap: wrap;
+	}
+	.products__aside_featured {
+		margin: 50px 0;
+	}
+}

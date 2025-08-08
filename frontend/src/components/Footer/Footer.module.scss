@@ -1,0 +1,134 @@
+.footer {
+	flex: 0 0 auto;
+}
+.footer__main {
+	background-color: #363636;
+}
+.footer__main_inner {
+	display: flex;
+	justify-content: space-between;
+	padding: 60px 0 50px;
+}
+.footer__main_item {
+	max-width: 25%;
+}
+.footer__main_title {
+	color: #ffffff;
+	font-size: 22px;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+.footer__main_list {
+	list-style: none;
+	margin: 25px 0;
+}
+.footer__main_link {
+	color: #a9a9a9;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 30px;
+	transition: all 0.3s;
+	&:hover {
+		color: $orange;
+	}
+}
+.footer__main_image {
+	display: block;
+	max-width: 100%;
+	width: 240px;
+	height: 35px;
+}
+.footer__copy {
+	background-color: #2a2a2a;
+}
+.footer__copy_inner {
+	display: flex;
+	align-items: center;
+	height: 95px;
+}
+.footer__copy_text {
+	margin-left: auto;
+	margin-right: 215px;
+	color: #a9a9a9;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 26px;
+	display: flex;
+	align-items: center;
+}
+.footer__copy_link {
+	color: #fff;
+	transition: all 0.3s;
+	display: flex;
+	margin: 0 5px;
+	&:hover {
+		color: $orange;
+	}
+}
+.footer__copy_socials {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.footer__copy_social {
+	font-size: 24px;
+	font-weight: 400;
+	color: #a1a1a1;
+	transition: all 0.3s;
+	& + & {
+		margin-left: 20px;
+	}
+	&:hover {
+		color: $orange;
+	}
+}
+//End Footer
+
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+//media
+
+@media (max-width: 768px) {
+	.footer__copy_socials {
+		justify-content: center;
+	}
+	.footer__copy_text {
+		margin-right: auto;
+		margin-left: auto;
+		justify-content: center;
+		margin-bottom: 10px;
+	}
+	.footer__main_inner {
+		padding: 10px 0;
+	}
+	.footer__copy_inner {
+		display: block;
+		padding: 10px 0;
+	}
+}
+
+@media (max-width: 640px) {
+	.footer__main_list {
+		margin: 10px 0;
+	}
+	.footer__main_item {
+		max-width: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+	.footer__main_inner {
+		flex-direction: column;
+	}
+}
