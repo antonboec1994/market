@@ -1,3 +1,5 @@
+import { config } from 'dotenv';
+config(); // Загружает .env в process.env
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './modules/app/app.module';
