@@ -20,6 +20,7 @@ const initialState: FiltersSliceState = {
 	searchValue: '',
 	searchModal: false,
 	menuUrlValue: menuList[0],
+	productsCount: 0,
 };
 
 export const filtersSlice = createSlice({
@@ -52,7 +53,6 @@ export const filtersSlice = createSlice({
 		},
 		setFilterUrl(state, action) {
 			const payload = action.payload;
-
 			if (payload.category !== undefined)
 				state.activeCategory = payload.category;
 			if (payload._page !== undefined) state.currentPage = payload._page;
@@ -61,7 +61,6 @@ export const filtersSlice = createSlice({
 			if (payload.color !== undefined) state.activeColor = payload.color;
 			if (payload.rating_gte !== undefined)
 				state.activeRating = payload.rating_gte;
-
 			if (
 				payload.salePrice_gte !== undefined ||
 				payload.salePrice_lte !== undefined
@@ -71,7 +70,6 @@ export const filtersSlice = createSlice({
 					payload.salePrice_lte ?? defaultPriceMax,
 				];
 			}
-
 			if (payload._sort !== undefined) {
 				const found = sortList.find(item => item.value === payload._sort);
 				if (found) {
@@ -87,6 +85,9 @@ export const filtersSlice = createSlice({
 		},
 		setMenuUrlValue(state, action) {
 			state.menuUrlValue = action.payload;
+		},
+		setProductsCount(state, action) {
+			state.productsCount = action.payload;
 		},
 	},
 });
@@ -104,6 +105,7 @@ export const {
 	setSearchValue,
 	setSearchModal,
 	setMenuUrlValue,
+	setProductsCount,
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

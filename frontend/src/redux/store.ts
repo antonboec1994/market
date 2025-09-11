@@ -6,13 +6,12 @@ import filtersSlice from './filters/slice';
 import getBlogSlice from './getBlog/slice';
 import getFeedbacksSlice from './getFeedbacks/slice';
 import getGraphicsSlice from './getGraphics/slice';
-import getProductsSlice from './getProducts/slice';
 import getShowroomSlice from './getShowroom/slice';
 import notificationSlice from './notification/slice';
+import { getProductsApi } from './getProducts/api';
 
 export const store = configureStore({
 	reducer: {
-		products: getProductsSlice,
 		cart: cartSlice,
 		filters: filtersSlice,
 		showroom: getShowroomSlice,
@@ -21,7 +20,10 @@ export const store = configureStore({
 		auth: authSlice,
 		graphics: getGraphicsSlice,
 		notification: notificationSlice,
+		[getProductsApi.reducerPath]: getProductsApi.reducer,
 	},
+	middleware: getDefaultMiddleware =>
+		getDefaultMiddleware().concat(getProductsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

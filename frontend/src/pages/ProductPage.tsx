@@ -5,8 +5,7 @@ import PopularSlider from '@/components/Content/Blocks/Sliders/PopularSlider/Pop
 import Subscribe from '@/components/Content/Blocks/Subscribe/Subscribe';
 import { SelectFilters } from '@/redux/filters/selectors';
 import { setMenuUrlValue, setSearchModal } from '@/redux/filters/slice';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
-import { Status } from '@/redux/getProducts/types';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 import { useAppDispatch } from '@/redux/store';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
@@ -15,7 +14,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ProductPage = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const { productsAll, statusAll } = useSelector(SelectGetProducts);
+	const { data: productsAll, isLoading } = useGetProductsQuery();
 	const { menuUrlValue } = useSelector(SelectFilters);
 	const { id } = useParams();
 	const product = productsAll?.find(obj => obj.id === Number(id));
@@ -33,7 +32,7 @@ const ProductPage = () => {
 
 	return (
 		<>
-			{statusAll === Status.LOADING ? (
+			{isLoading ? (
 				'Идёт загрузка!'
 			) : (
 				<>

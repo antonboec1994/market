@@ -1,21 +1,20 @@
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
 import { formatNumber } from '@/utils/formatNumbers';
 import { OnClickAddToCart } from '@/utils/onClickAddToCart';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './Featured.module.scss';
 import type { ProductType } from '@/redux/getProducts/types';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const Featured = () => {
-	const { productsAll } = useSelector(SelectGetProducts);
+	const { data: products } = useGetProductsQuery();
 
-	const findProducts = productsAll?.filter(item => item.featured);
+	const findProducts = products?.filter(item => item.featured);
 
 	return (
 		<div className={styles.products__aside_featured}>
 			<div className={styles.products__featured_title}>Популярное</div>
 			<div className={styles.products__featured_inner}>
-				{findProducts.map((product: ProductType, index: number) => (
+				{findProducts?.map((product: ProductType, index: number) => (
 					<div className={styles.products__featured_item} key={index}>
 						<div className={styles.products__featured_image}>
 							<img src={product.imageUrl} alt='alt' />

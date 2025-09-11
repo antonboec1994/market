@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { setSearchModal, setSearchValue } from '@/redux/filters/slice';
 import { SelectFilters } from '@/redux/filters/selectors';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
 import type { ProductType } from '@/redux/getProducts/types';
 import { useAppDispatch } from '@/redux/store';
 import styles from './Search.module.scss';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 type SearchPropsType = {
 	scrollPosition: number;
@@ -17,8 +17,8 @@ type SearchPropsType = {
 const Search: React.FC<SearchPropsType> = ({ scrollPosition }) => {
 	const dispatch = useAppDispatch();
 	const { searchValue, searchModal } = useSelector(SelectFilters);
+	const { data: products, isLoading } = useGetProductsQuery();
 
-	const { productsAll, statusAll } = useSelector(SelectGetProducts);
 	const searchRef = useRef(null);
 
 	const { register, handleSubmit } = useForm({ mode: 'onChange' });
@@ -52,12 +52,15 @@ const Search: React.FC<SearchPropsType> = ({ scrollPosition }) => {
 		};
 	}, [dispatch]);
 
-	const findProducts = productsAll?.filter((item: ProductType) => {
-		if (!searchValue.Search) return true;
-		const itemName = item.name.toLowerCase();
-		const searchQuery = searchValue.Search.toLowerCase();
-		return itemName.includes(searchQuery);
-	});
+	const findProducts =
+		products && products.length > 0
+			? products?.filter((item: ProductType) => {
+					if (!searchValue.Search) return true;
+					const itemName = item.name.toLowerCase();
+					const searchQuery = searchValue.Search.toLowerCase();
+					return itemName.includes(searchQuery);
+			  })
+			: [];
 
 	return (
 		<form
@@ -86,7 +89,7 @@ const Search: React.FC<SearchPropsType> = ({ scrollPosition }) => {
 						: styles.header__main_search_modal
 				}
 			>
-				{statusAll === 'LOADING' ? (
+				{isLoading ? (
 					'Идёт загрузка!'
 				) : (
 					<ul className={styles.cardlist}>

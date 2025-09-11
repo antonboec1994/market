@@ -10,36 +10,14 @@ import {
 	setFilterUrl,
 	setPriceMinMax,
 } from '@/redux/filters/slice';
-import { fetchProductsByFilter } from '@/redux/getProducts/thunks';
 import { useAppDispatch } from '@/redux/store';
 import { useSelector } from 'react-redux';
 import styles from './ResetFilters.module.scss';
 
 const ResetFilters = () => {
 	const dispatch = useAppDispatch();
-	const {
-		activeCategory,
-		activeRating,
-		priceMinMax,
-		activeSort,
-		activeShow,
-		currentPage,
-		activeColor,
-	} = useSelector(SelectFilters);
+	const {} = useSelector(SelectFilters);
 
-	const getCards = async () => {
-		dispatch(
-			fetchProductsByFilter({
-				activeCategory,
-				activeRating,
-				currentPage,
-				activeShow,
-				activeColor,
-				activeSort,
-				priceMinMax,
-			})
-		);
-	};
 	const filtersReset = () => {
 		dispatch(setFilterUrl(''));
 		dispatch(setActiveCategory(''));
@@ -61,7 +39,6 @@ const ResetFilters = () => {
 			})
 		);
 		dispatch(setPriceMinMax([defaultPriceMin, defaultPriceMax]));
-		getCards();
 	};
 
 	return (

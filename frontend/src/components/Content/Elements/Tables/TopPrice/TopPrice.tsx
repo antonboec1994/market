@@ -1,16 +1,13 @@
 import { DataGrid, ruRU, type GridColDef } from '@mui/x-data-grid';
-
-import { useSelector } from 'react-redux';
-
 import { categoriesList } from '@/redux/filters/consts';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
 import type { ProductTypeForTable } from '@/redux/getProducts/types';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Tables.module.scss';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const TopPrice: React.FC = () => {
-	const { productsAll } = useSelector(SelectGetProducts);
+	const { data: productsAll } = useGetProductsQuery();
 	const [array, setArray] = useState<ProductTypeForTable[]>([]);
 
 	useEffect(() => {

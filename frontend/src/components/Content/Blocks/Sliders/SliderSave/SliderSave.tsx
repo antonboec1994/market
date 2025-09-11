@@ -1,9 +1,8 @@
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import warehouse from '../../../../../assets/images/top-slider-hot/warehouse.png';
 import styles from './SliderSave.module.scss';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const SliderSave = () => {
 	const settings = {
@@ -25,7 +24,7 @@ const SliderSave = () => {
 		],
 	};
 
-	const { productsAll } = useSelector(SelectGetProducts);
+	const { data: productsAll } = useGetProductsQuery();
 
 	const findProducts = productsAll?.filter(item => {
 		return item?.saveImage;
@@ -33,7 +32,7 @@ const SliderSave = () => {
 
 	return (
 		<Slider className='sliders__slider_save' {...settings}>
-			{findProducts.map((item, index) => (
+			{findProducts?.map((item, index) => (
 				<Link
 					className={styles.sliders__save_item}
 					key={index}

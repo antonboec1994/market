@@ -1,11 +1,11 @@
 import AddToCartBtn from '@/components/Content/Elements/Buttons/AddToCartBtn';
 import ViewBtn from '@/components/Content/Elements/Buttons/ViewBtn';
 import { SelectAuth } from '@/redux/auth/selectors';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import styles from './SliderHot.module.scss';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const SliderHot = () => {
 	const settings = {
@@ -20,7 +20,7 @@ const SliderHot = () => {
 		infinite: true,
 	};
 
-	const { productsAll } = useSelector(SelectGetProducts);
+	const { data: productsAll } = useGetProductsQuery();
 	const { isLogged } = useSelector(SelectAuth);
 
 	const findProducts = productsAll?.filter(item => {

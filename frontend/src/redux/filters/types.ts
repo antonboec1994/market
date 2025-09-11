@@ -33,4 +33,5 @@ export interface FiltersSliceState {
 	searchValue: any;
 	searchModal: boolean;
 	menuUrlValue: MenuList;
+	productsCount: number;
 }

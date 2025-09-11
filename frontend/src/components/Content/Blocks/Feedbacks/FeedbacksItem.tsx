@@ -1,7 +1,6 @@
 import StarRating from '@/components/Content/Elements/StarRating/StarRating';
 import { deleteFeedback } from '@/redux/getFeedbacks/thunks';
 import type { FeedbacksType } from '@/redux/getFeedbacks/types';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
 import {
 	ntfMessageDeletefeedback,
 	ntfTypeDeletefeedback,
@@ -9,10 +8,10 @@ import {
 import { useAppDispatch } from '@/redux/store';
 import { DispatchNotification } from '@/utils/notificationDispatch';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import styles from './Feedbacks.module.scss';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 type feedbackItemProps = {
 	item: FeedbacksType;
@@ -26,14 +25,14 @@ const FeedbacksItem: React.FC<feedbackItemProps> = ({
 	initialCountfeedbackToShow,
 }) => {
 	const dispatch = useAppDispatch();
-	const { productsAll } = useSelector(SelectGetProducts);
+	const { data: productsAll } = useGetProductsQuery();
 	const currentfeedbackProductId = item?.productId;
 	const location = useLocation();
 	const [show, setShow] = useState(false);
 	const pathnameProduct = location.pathname.includes('product');
 	const pathnameProfile = location.pathname.includes('profile');
 
-	const findProduct = productsAll.find(item => {
+	const findProduct = productsAll?.find(item => {
 		return item?.id === currentfeedbackProductId;
 	});
 

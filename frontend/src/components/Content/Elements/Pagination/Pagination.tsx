@@ -1,12 +1,9 @@
 import ReactPaginate from 'react-paginate';
 import { useSelector } from 'react-redux';
-
 import { setCurrentPage } from '@/redux/filters/slice';
-
 import { SelectFilters } from '@/redux/filters/selectors';
 import { feedbacksLimitOnPage } from '@/redux/getFeedbacks/consts';
 import { SelectFeedbacks } from '@/redux/getFeedbacks/selectors';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
 import { useAppDispatch } from '@/redux/store';
 import styles from './Pagination.module.scss';
 
@@ -16,8 +13,7 @@ type PaginationProps = {
 
 const Pagination: React.FC<PaginationProps> = ({ type }) => {
 	const dispatch = useAppDispatch();
-	const { currentPage, activeShow } = useSelector(SelectFilters);
-	const { productsCount } = useSelector(SelectGetProducts);
+	const { currentPage, activeShow, productsCount } = useSelector(SelectFilters);
 	const { feedbacks } = useSelector(SelectFeedbacks);
 
 	const pages =

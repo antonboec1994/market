@@ -8,18 +8,49 @@ import FilterSortby from '@/components/Content/Elements/Filters/FilterSortby/Fil
 import ResetFilters from '@/components/Content/Elements/Filters/ResetFilters/ResetFilters';
 import Pagination from '@/components/Content/Elements/Pagination/Pagination';
 import { SelectFilters } from '@/redux/filters/selectors';
-import { setFilterResults } from '@/redux/filters/slice';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
-import { Status, type ProductType } from '@/redux/getProducts/types';
+import {
+	setActiveCategory,
+	setActiveColor,
+	setActiveShow,
+	setCurrentPage,
+	setFilterResults,
+	setFilterUrl,
+	setMenuUrlValue,
+} from '@/redux/filters/slice';
+import { type ProductType } from '@/redux/getProducts/types';
 import { useAppDispatch } from '@/redux/store';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './Catalog.module.scss';
+import { useGetProductsByFilterQuery } from '@/redux/getProducts/api';
+import { useNavigate } from 'react-router-dom';
+import { menuList } from '@/redux/filters/consts';
+import qs from 'qs';
 
 const Catalog = () => {
 	const dispatch = useAppDispatch();
-	const { products, status } = useSelector(SelectGetProducts);
-	const { filterResults, activeSort, activeShow } = useSelector(SelectFilters);
+	const navigate = useNavigate();
+	const isMounted = useRef(false);
+	const {
+		activeCategory,
+		activeRating,
+		priceMinMax,
+		activeSort,
+		activeShow,
+		currentPage,
+		activeColor,
+		filterResults,
+	} = useSelector(SelectFilters);
+	const { data: productsByFilter, isLoading } = useGetProductsByFilterQuery({
+		activeCategory,
+		activeRating,
+		currentPage,
+		activeShow,
+		activeColor,
+		activeSort,
+		priceMinMax,
+	});
+	const products = productsByFilter?.items;
 
 	const resultCatalog = {
 		activeSort: activeSort.name,
@@ -27,16 +58,70 @@ const Catalog = () => {
 	};
 
 	useEffect(() => {
+		window.scrollTo(0, 0);
+		dispatch(setMenuUrlValue(menuList[1]));
+		if (window.location.search) {
+			const params = qs.parse(window.location.search.substring(1));
+			dispatch(setFilterUrl({ ...params }));
+		} else {
+			dispatch(setActiveCategory(''));
+			dispatch(setCurrentPage(1));
+			dispatch(setActiveShow(6));
+			dispatch(setActiveColor(''));
+		}
+		isMounted.current = true;
+	}, [dispatch]);
+
+	// Обновление URL при изменении фильтров
+	useEffect(() => {
+		if (isMounted.current) {
+			const queryString = qs.stringify(
+				{
+					category: activeCategory === '' ? null : activeCategory,
+					_page: currentPage,
+					_limit: activeShow,
+					_sort: activeSort?.value,
+					color: activeColor === '' ? null : activeColor,
+					rating: activeRating,
+					salePrice_gte: priceMinMax[0],
+					salePrice_lte: priceMinMax[1],
+				},
+				{ skipNulls: true }
+			);
+			navigate(`?${queryString}`);
+		}
+	}, [
+		activeCategory,
+		activeRating,
+		priceMinMax,
+		activeColor,
+		activeSort,
+		activeShow,
+		currentPage,
+	]);
+
+	// Обновление фильтров при изменении URL
+	useEffect(() => {
+		if (isMounted.current) {
+			const search = window.location.search;
+			if (search) {
+				const params = qs.parse(search.substring(1));
+				dispatch(setFilterUrl(params));
+			}
+		}
+	}, [window.location.search]);
+
+	useEffect(() => {
 		dispatch(setFilterResults({ ...resultCatalog }));
 	}, [activeSort, activeShow, dispatch]);
 
 	const cards =
-		products.length > 0 ? (
+		products && products.length > 0 ? (
 			products.map((product: ProductType, index: number) => (
 				<Card product={product} key={index} />
 			))
 		) : (
-			<p>Товаров по заданным параметрам не найдено!</p>
+			<p>Список продуктов пустой!</p>
 		);
 
 	return (
@@ -57,7 +142,7 @@ const Catalog = () => {
 							<li>На странице: {filterResults.activeShow}</li>
 						</ul>
 						<div className={styles.products__content_inner}>
-							{status === Status.LOADING ? <p>Идёт загрузка!</p> : cards}
+							{isLoading ? <p>Идёт загрузка!</p> : cards}
 						</div>
 						<Pagination type='products' />
 					</div>

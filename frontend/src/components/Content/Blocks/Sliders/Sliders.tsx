@@ -1,14 +1,13 @@
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
-import { useSelector } from 'react-redux';
 import SliderHot from './SliderHot/SliderHot';
 import SliderSave from './SliderSave/SliderSave';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const Sliders = () => {
-	const { statusAll } = useSelector(SelectGetProducts);
+	const { isLoading } = useGetProductsQuery();
 
 	return (
 		<>
-			{statusAll === 'LOADING' ? (
+			{isLoading ? (
 				'Идёт загрузка!'
 			) : (
 				<section className='sliders'>

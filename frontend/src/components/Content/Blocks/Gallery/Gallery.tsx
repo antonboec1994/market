@@ -1,12 +1,10 @@
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
-import { Status } from '@/redux/getProducts/types';
 import { findProductByAttribute } from '@/utils/findProductByAttribute';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import banner from '../../../../assets/images/gallery/banner.jpg';
 import styles from './Gallery.module.scss';
 import GalleryItem from './GalleryItem/GalleryItem';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 export const tabsList = [
 	{ id: 0, title: 'Рекомендуемое' },
@@ -16,7 +14,7 @@ export const tabsList = [
 ];
 
 const Gallery: React.FC = () => {
-	const { statusAll } = useSelector(SelectGetProducts);
+	const { isLoading } = useGetProductsQuery();
 	const [tabSelected, setTabSelected] = useState(0);
 
 	const onClickTab = (index: number) => {
@@ -25,7 +23,7 @@ const Gallery: React.FC = () => {
 
 	return (
 		<>
-			{statusAll === Status.LOADING ? (
+			{isLoading ? (
 				'Идёт загрузка!'
 			) : (
 				<section className='gallery'>

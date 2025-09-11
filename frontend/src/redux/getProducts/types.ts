@@ -19,6 +19,18 @@ export type ProductType = {
 	saveImage?: string;
 };
 
+export type ProductsFilteredResponse = {
+	items: ProductType[];
+	headersCount: number;
+};
+
+export type ProductsErrorResponse = {
+	status: number;
+	data: {
+		message: string;
+	};
+};
+
 export type ProductTypeForTable = Omit<ProductType, 'category'> & {
 	category: string;
 };
@@ -35,9 +47,11 @@ export type activeSort = {
 	name: string;
 	value: string;
 };
+
 export type Search = {
 	Search: string;
 };
+
 export type FetchProductsArgs = {
 	activeCategory?: string;
 	activeColor?: string;
@@ -48,10 +62,9 @@ export type FetchProductsArgs = {
 	priceMinMax?: [number, number];
 	searchValue?: any;
 };
+
 export interface GetProductsSliceState {
 	productsCount: number;
 	products: ProductType[];
-	productsAll: ProductType[];
 	status: string;
-	statusAll: string;
 }

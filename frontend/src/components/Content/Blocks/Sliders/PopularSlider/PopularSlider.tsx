@@ -1,23 +1,22 @@
 import Card from '@/components/Content/Elements/Card/Card';
 import Slider from 'react-slick';
 import styles from './Popular.module.scss';
-import { SelectGetProducts } from '@/redux/getProducts/selectors';
-import { useSelector } from 'react-redux';
 import type { ProductType } from '@/redux/getProducts/types';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 type PopularSliderPropsType = {
 	category: number;
 };
 
 const PopularSlider: React.FC<PopularSliderPropsType> = ({ category }) => {
-	const { productsAll } = useSelector(SelectGetProducts);
+	const { data: productsAll } = useGetProductsQuery();
 
 	const filterBy = (productsAll: ProductType[], field: any, value: any) => {
 		return productsAll.filter(
 			(item: ProductType) => item[field as keyof ProductType] === value
 		);
 	};
-	const cards = filterBy(productsAll, 'category', category);
+	const cards = productsAll ? filterBy(productsAll, 'category', category) : [];
 
 	const settings = {
 		slidesToShow: 4,
