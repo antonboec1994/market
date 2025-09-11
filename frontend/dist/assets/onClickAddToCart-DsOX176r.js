@@ -1,1 +1,0 @@
-import{U as t,V as s,W as r,D as i,X as c,Y as o,Z as l}from"./index-Biln3oKx.js";const C=async a=>{console.log("product ",a);const e={productId:a.id,imageUrl:a.imageUrl,name:a.name,price:a.price,salePrice:a.salePrice,count:1,currentTotalPrice:a.price,currentTotalSalePrice:a.salePrice};await t.dispatch(s(e)),await t.dispatch(r()),i(!0,e,l,o),t.dispatch(c(!0))};export{C as O};
