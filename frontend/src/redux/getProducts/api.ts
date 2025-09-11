@@ -18,7 +18,8 @@ export const getProductsApi = createApi({
 			transformErrorResponse: (response: ProductsErrorResponse) => ({
 				status: response.status,
 				message:
-					response.data.message || 'Произошла ошибка при загрузке данных',
+					response.data.message ||
+					'Произошла ошибка при загрузке данных продукты',
 			}),
 			keepUnusedDataFor: 600,
 		}),

@@ -1,15 +1,13 @@
-import { Status } from '@/redux/getProducts/types';
-import { SelectShowroom } from '@/redux/getShowroom/selectors';
 import React from 'react';
-import { useSelector } from 'react-redux';
 import Card from './Card/Card';
 import styles from './Showroom.module.scss';
+import { useGetShowroomQuery } from '@/redux/getShowroom/api';
 
 const Showroom: React.FC = () => {
-	const { items, status } = useSelector(SelectShowroom);
+	const { data: items, isLoading } = useGetShowroomQuery();
 
 	const cards =
-		items.length > 0 ? (
+		items && items.length > 0 ? (
 			items.map((item, index) => <Card key={index} findItem={item} />)
 		) : (
 			<p>Не найдено!</p>
@@ -22,7 +20,7 @@ const Showroom: React.FC = () => {
 					Виртуальный шоу-рум офисной мебели
 				</h2>
 				<div className={styles.page_showroom__inner}>
-					{status === Status.LOADING ? <p>Идёт загрузка!</p> : cards}
+					{isLoading ? <p>Идёт загрузка!</p> : cards}
 				</div>
 			</div>
 		</section>
