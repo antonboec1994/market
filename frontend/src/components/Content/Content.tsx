@@ -1,52 +1,20 @@
 import React, { lazy } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
-
 import styles from './Content.module.scss';
-
 import background from '../../assets/images/content-background.jpg';
 
-const HomePage = lazy(
-	() => import(/* webpackChunkName: "HomePage" */ '../../pages/HomePage')
-);
-const AboutPage = lazy(
-	() => import(/* webpackChunkName: "AboutPage" */ '../../pages/AboutPage')
-);
-const ContactsPage = lazy(
-	() =>
-		import(/* webpackChunkName: "ContactsPage" */ '../../pages/ContactsPage')
-);
-const DeliveryPage = lazy(
-	() =>
-		import(/* webpackChunkName: "DeliveryPage" */ '../../pages/DeliveryPage')
-);
-const PartnershipPage = lazy(
-	() =>
-		import(
-			/* webpackChunkName: "PartnershipPage" */ '../../pages/PartnershipPage'
-		)
-);
-const PaymentPage = lazy(
-	() => import(/* webpackChunkName: "PaymentPage" */ '../../pages/PaymentPage')
-);
-const ProductPage = lazy(
-	() => import(/* webpackChunkName: "ProductPage" */ '../../pages/ProductPage')
-);
-const CatalogPage = lazy(
-	() => import(/* webpackChunkName: "CatalogPage" */ '../../pages/CatalogPage')
-);
-const ShowroomPage = lazy(
-	() =>
-		import(/* webpackChunkName: "ShowroomPage" */ '../../pages/ShowroomPage')
-);
-const CartPage = lazy(
-	() => import(/* webpackChunkName: "CartPage" */ '../../pages/CartPage')
-);
-const ProfilePage = lazy(
-	() => import(/* webpackChunkName: "ProfilePage" */ '../../pages/ProfilePage')
-);
-const ErrorPage = lazy(
-	() => import(/* webpackChunkName: "ErrorPage" */ '../../pages/ErrorPage')
-);
+const HomePage = lazy(() => import('../../pages/HomePage'));
+const AboutPage = lazy(() => import('../../pages/AboutPage'));
+const ContactsPage = lazy(() => import('../../pages/ContactsPage'));
+const DeliveryPage = lazy(() => import('../../pages/DeliveryPage'));
+const PartnershipPage = lazy(() => import('../../pages/PartnershipPage'));
+const PaymentPage = lazy(() => import('../../pages/PaymentPage'));
+const ProductPage = lazy(() => import('../../pages/ProductPage'));
+const CatalogPage = lazy(() => import('../../pages/CatalogPage'));
+const ShowroomPage = lazy(() => import('../../pages/ShowroomPage'));
+const CartPage = lazy(() => import('../../pages/CartPage'));
+const ProfilePage = lazy(() => import('../../pages/ProfilePage'));
+const ErrorPage = lazy(() => import('../../pages/ErrorPage'));
 
 const Content: React.FC = () => {
 	const location = useLocation();

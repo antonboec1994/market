@@ -18,10 +18,11 @@ export default defineConfig({
 		},
 	},
 	build: {
-		inlineDynamicImports: true,
 		rollupOptions: {
 			output: {
-				manualChunks: undefined,
+				manualChunks: {
+					vendor: ['react', 'react-dom', 'axios'],
+				},
 			},
 		},
 	},
