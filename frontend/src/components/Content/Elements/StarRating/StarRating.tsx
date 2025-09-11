@@ -1,5 +1,5 @@
 import { setRating } from '@/redux/getFeedbacks/slice';
-import React from 'react';
+
 import ReactStars from 'react-rating-stars-component';
 import { useDispatch } from 'react-redux';
 import styles from './StarRating.module.scss';

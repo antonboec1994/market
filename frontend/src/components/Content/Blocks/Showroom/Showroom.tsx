@@ -1,7 +1,6 @@
-import React from 'react';
+import { useGetShowroomQuery } from '@/redux/getShowroom/api';
 import Card from './Card/Card';
 import styles from './Showroom.module.scss';
-import { useGetShowroomQuery } from '@/redux/getShowroom/api';
 
 const Showroom: React.FC = () => {
 	const { data: items, isLoading } = useGetShowroomQuery();

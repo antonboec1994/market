@@ -4,7 +4,6 @@ import StarRating from '@/components/Content/Elements/StarRating/StarRating';
 import { SelectAuth } from '@/redux/auth/selectors';
 import type { ProductType } from '@/redux/getProducts/types';
 import { formatNumber } from '@/utils/formatNumbers';
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { tabsList } from '../Gallery';

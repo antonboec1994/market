@@ -2,7 +2,7 @@ import { colorsList } from '@/redux/filters/consts';
 import { SelectFilters } from '@/redux/filters/selectors';
 import { setActiveColor, setCurrentPage } from '@/redux/filters/slice';
 import { useAppDispatch } from '@/redux/store';
-import React from 'react';
+
 import { useSelector } from 'react-redux';
 import styles from './FilterColor.module.scss';
 
