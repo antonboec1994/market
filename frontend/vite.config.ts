@@ -20,9 +20,9 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			output: {
+				inlineDynamicImports: true, // ✅ Объединить всё в один файл
 				manualChunks: undefined, // ❌ Удалить
 			},
 		},
-		inlineDynamicImports: true, // ✅ Объединить всё в один файл
 	},
 });
