@@ -20,9 +20,9 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					vendor: ['react', 'react-dom', 'axios'],
-				},
+				// manualChunks: {
+				// 	vendor: ['react', 'react-dom', 'axios'],
+				// },
 			},
 		},
 	},
