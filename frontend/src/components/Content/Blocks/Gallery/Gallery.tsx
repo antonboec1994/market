@@ -1,10 +1,10 @@
-import { findProductByAttribute } from '@/utils/findProductByAttribute';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import banner from '../../../../assets/images/gallery/banner.jpg';
 import styles from './Gallery.module.scss';
 import GalleryItem from './GalleryItem/GalleryItem';
 import { useGetProductsQuery } from '@/redux/getProducts/api';
+import { useFindProductByAttribute } from '@/utils/useFindProductByAttribute';
 
 export const tabsList = [
 	{ id: 0, title: 'Рекомендуемое' },
@@ -16,6 +16,12 @@ export const tabsList = [
 const Gallery: React.FC = () => {
 	const { isLoading } = useGetProductsQuery();
 	const [tabSelected, setTabSelected] = useState(0);
+
+	// ✅ Все хуки — здесь, до return
+	const productRecommend = useFindProductByAttribute('recommend');
+	const productSalehit = useFindProductByAttribute('salehit');
+	const productSaler = useFindProductByAttribute('saler');
+	const productBestRating = useFindProductByAttribute('bestRating');
 
 	const onClickTab = (index: number) => {
 		setTabSelected(index);
@@ -51,22 +57,22 @@ const Gallery: React.FC = () => {
 								<GalleryItem
 									tabSelected={tabSelected}
 									tabListIndex={0}
-									productType={findProductByAttribute('recommend')}
+									productType={productRecommend}
 								/>
 								<GalleryItem
 									tabSelected={tabSelected}
 									tabListIndex={1}
-									productType={findProductByAttribute('salehit')}
+									productType={productSalehit}
 								/>
 								<GalleryItem
 									tabSelected={tabSelected}
 									tabListIndex={2}
-									productType={findProductByAttribute('saler')}
+									productType={productSaler}
 								/>
 								<GalleryItem
 									tabSelected={tabSelected}
 									tabListIndex={3}
-									productType={findProductByAttribute('bestRating')}
+									productType={productBestRating}
 								/>
 							</div>
 						</div>
