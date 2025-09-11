@@ -20,10 +20,9 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			output: {
-				manualChunks: {
-					lodash: ['lodash'],
-				},
+				manualChunks: undefined, // ❌ Удалить
 			},
 		},
+		inlineDynamicImports: true, // ✅ Объединить всё в один файл
 	},
 });
