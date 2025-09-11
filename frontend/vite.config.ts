@@ -17,13 +17,13 @@ export default defineConfig({
 			},
 		},
 	},
-	build: {
-		rollupOptions: {
-			output: {
-				// manualChunks: {
-				// 	vendor: ['react', 'react-dom', 'axios'],
-				// },
-			},
-		},
-	},
+	// build: {
+	// 	rollupOptions: {
+	// 		output: {
+	// 			manualChunks: {
+	// 				vendor: ['react', 'react-dom', 'axios'],
+	// 			},
+	// 		},
+	// 	},
+	// },
 });
