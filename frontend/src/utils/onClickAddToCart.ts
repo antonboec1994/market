@@ -9,7 +9,6 @@ import { DispatchNotification } from './notificationDispatch';
 import type { ProductType } from '@/redux/getProducts/types';
 
 export const OnClickAddToCart = async (product: ProductType) => {
-	console.log('product ', product);
 	const productForCart = {
 		productId: product.id,
 		imageUrl: product.imageUrl,

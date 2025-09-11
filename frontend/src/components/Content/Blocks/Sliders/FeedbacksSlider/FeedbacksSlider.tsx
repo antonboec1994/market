@@ -21,8 +21,6 @@ const FeedbacksSlider = () => {
 		cssEase: 'ease-out',
 	};
 
-	console.log(feedbacksAll);
-
 	const findProductFunc = (id: number) => {
 		const findProduct = productsAll?.find(product => {
 			return product?.id === id;

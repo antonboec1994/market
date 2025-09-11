@@ -31,7 +31,6 @@ const OrderModal = () => {
 	const modalClose = e => {
 		if (e.target.classList.contains('dismiss')) {
 			dispatch(setOrderModalStatus(false));
-			console.log('click');
 		}
 	};
 

@@ -1,7 +1,6 @@
 import { menuList } from '@/redux/filters/consts';
 import { setMenuUrlValue } from '@/redux/filters/slice';
 import { useAppDispatch } from '@/redux/store';
-
 import Blog from '../components/Content/Blocks/Blog/Blog';
 import Brands from '../components/Content/Blocks/Brands/Brands';
 import Gallery from '../components/Content/Blocks/Gallery/Gallery';
