@@ -29,7 +29,7 @@ const SliderHot = () => {
 
 	return (
 		<Slider className='sliders__slider_hot' {...settings}>
-			{findProducts.map((item, index) => (
+			{findProducts?.map((item, index) => (
 				<div className={styles.slide} key={index}>
 					<h3 className={styles.slide__title}>Горячее</h3>
 					<div
