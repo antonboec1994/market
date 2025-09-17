@@ -7,7 +7,7 @@ import { useGetGraphicsQuery } from '@/redux/getGraphics/api';
 const Dashboard: React.FC = () => {
 	const { data: favorites, isLoading } = useGetGraphicsQuery();
 
-	const filteredArray = useMemo(() => {
+	const filteredArray: any = useMemo(() => {
 		return favorites?.filter(
 			(value: any, index: number, self: any) =>
 				index === self.findIndex((t: any) => t.name === value.name)

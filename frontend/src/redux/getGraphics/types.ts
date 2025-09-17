@@ -1,7 +1,7 @@
 export type GraphicType = {
 	id: number;
 	name: string;
-	values: [[number, number, number]];
+	values: any;
 };
 
 export type GraphicsErrorResponse = {
