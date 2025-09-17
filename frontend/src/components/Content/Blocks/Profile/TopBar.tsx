@@ -22,6 +22,8 @@ const TopBar: React.FC = () => {
 	const { notificationStatus, notificationInfo } =
 		useSelector(SelectNotification);
 
+	console.log('topbar ', user);
+
 	const notificationBtn = () => {
 		dispatch(setNotificationStatus(false));
 		setModal(!modal);

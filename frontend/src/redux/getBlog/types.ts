@@ -1,12 +1,19 @@
 export type PostType = {
-  id: number;
-  date: string;
-  description: string;
-  imageUrl: string;
-  title: string;
+	id: number;
+	date: string;
+	description: string;
+	imageUrl: string;
+	title: string;
 };
 
 export interface BlogSliceState {
-  posts: PostType[];
-  status: string;
+	posts: PostType[];
+	status: string;
 }
+
+export type BlogErrorResponse = {
+	status: number;
+	data: {
+		message: string;
+	};
+};

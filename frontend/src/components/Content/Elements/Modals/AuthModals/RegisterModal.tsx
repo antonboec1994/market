@@ -4,7 +4,6 @@ import {
 	setRegisterModalStatus,
 	setRequestError,
 } from '@/redux/auth/slice';
-import { loginUser, registerUser } from '@/redux/auth/thunks';
 import type { IRegisterData } from '@/redux/auth/types';
 import { setMenuUrlValue } from '@/redux/filters/slice';
 import { useAppDispatch } from '@/redux/store';
@@ -23,6 +22,10 @@ import { RegisterSchema } from '@/utils/yup';
 import RequestError from '../../RequestError/RequestError';
 import styles from './AuthModal.module.scss';
 import { Success } from '@/errors';
+import {
+	useLoginUserMutation,
+	useRegisterUserMutation,
+} from '@/redux/auth/api';
 
 interface RegisterFormInputs {
 	name: string;
@@ -34,8 +37,7 @@ interface RegisterFormInputs {
 
 const RegisterModal = () => {
 	const dispatch = useAppDispatch();
-	const { registerModalStatus, isLoading, requestError } =
-		useSelector(SelectAuth);
+	const { registerModalStatus, requestError } = useSelector(SelectAuth);
 	const {
 		register,
 		handleSubmit,
@@ -43,6 +45,9 @@ const RegisterModal = () => {
 	} = useForm<RegisterFormInputs>({
 		resolver: yupResolver(RegisterSchema),
 	});
+	const [registerUser, { isLoading: registerStatus }] =
+		useRegisterUserMutation();
+	const [loginUser] = useLoginUserMutation();
 
 	useEffect(() => {
 		dispatch(setMenuUrlValue(''));
@@ -57,31 +62,25 @@ const RegisterModal = () => {
 		}
 	}, [requestError, dispatch]);
 
-	const onSubmit = async (data: any) => {
-		dispatch(setRequestError(''));
+	const onSubmit = async (data: RegisterFormInputs) => {
 		const userData: IRegisterData = {
 			name: data.name,
 			login: data.login,
 			email: data.email,
 			password: data.password,
 		};
+		dispatch(setRequestError(''));
 		try {
-			const res = await dispatch(registerUser(userData));
-			if ('error' in res) {
-				const errorMessage = res.payload || res.error.message;
-				dispatch(setRequestError(errorMessage));
-				return;
-			} else {
-				dispatch(setRequestError(Success.successRegister));
-				const loginResult = await dispatch(
-					loginUser({ email: data.email, password: data.password })
-				);
-				if ('error' in loginResult) {
-					dispatch(setRequestError('Ошибка входа после регистрации'));
-					return;
-				}
+			await registerUser(userData).unwrap();
+			await loginUser({
+				email: data.email,
+				password: data.password,
+			}).unwrap();
+			dispatch(setRequestError(Success.successRegister));
+			setTimeout(() => {
+				dispatch(setRequestError(''));
 				dispatch(setRegisterModalStatus(false));
-			}
+			}, 2000);
 		} catch (error) {
 			dispatch(setRequestError('Произошла ошибка при регистрации'));
 		}
@@ -166,7 +165,7 @@ const RegisterModal = () => {
 						</FormGroup>
 						<RequestError error={Success.successRegister} />
 						<LoadingButton
-							loading={isLoading}
+							loading={registerStatus}
 							className={styles.button_box}
 							variant='contained'
 							type='submit'

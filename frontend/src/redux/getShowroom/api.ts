@@ -15,6 +15,7 @@ export const getShowroomApi = createApi({
 					response.data.message ||
 					'Произошла ошибка при загрузке данных шоуроум',
 			}),
+			providesTags: ['Showroom'],
 			keepUnusedDataFor: 600,
 		}),
 	}),

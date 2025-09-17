@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import moment from 'moment';
 import { getUserFromLs } from '@/utils/authLS/getUserFromLS';
-import { getUser, loginUser, registerUser } from './thunks';
+import { getUser } from './thunks';
 import type { AuthSliceState } from './types';
-import { Success } from '@/errors';
+import { userApi } from './api';
 
 const { user } = getUserFromLs();
 
@@ -59,45 +59,18 @@ export const authSlice = createSlice({
 		},
 	},
 	extraReducers: builder => {
-		builder.addCase(loginUser.pending, state => {
-			state.isLogged = false;
-			state.isLoading = true;
-		});
-		builder.addCase(loginUser.fulfilled, (state, action) => {
-			if (action.payload.user) {
-				state.user = action.payload;
-				state.requestError = Success.successLogin;
-				state.isLogged = true;
-				state.isLoading = false;
-				setTimeout(() => {
-					window.location.reload();
-				}, 2000);
-			} else {
-				state.requestError = action.payload;
-				state.isLoading = false;
-			}
-		});
-		builder.addCase(loginUser.rejected, state => {
-			state.isLogged = false;
-			state.isLoading = false;
-		});
-
-		builder.addCase(registerUser.pending, state => {
-			state.isLogged = false;
-			state.isLoading = true;
-		});
-		builder.addCase(registerUser.fulfilled, state => {
-			state.isLogged = true;
-			state.isLoading = false;
-		});
-		builder.addCase(registerUser.rejected, state => {
-			state.isLogged = false;
-			state.isLoading = false;
-		});
-
 		builder.addCase(getUser.fulfilled, (state, action) => {
 			state.user = action.payload;
 		});
+
+		builder.addMatcher(
+			userApi.endpoints.loginUser.matchFulfilled,
+			(state, action) => {
+				// state.user = action.payload;
+				state.isLogged = true;
+				console.log(' action payload login user ', action.payload);
+			}
+		);
 	},
 });
 

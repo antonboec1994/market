@@ -1,17 +1,5 @@
 import type { FeedbacksType } from '../getFeedbacks/types';
 
-export type User = {
-	user: any;
-	id: number;
-	name: string;
-	login: string;
-	email: string;
-	createdAt: string;
-	updatedAt: string;
-	feedback: [FeedbacksType];
-	access_token?: string;
-};
-
 export interface AuthSliceState {
 	user: User;
 	isLogged: boolean;
@@ -25,6 +13,18 @@ export interface AuthSliceState {
 	updatedTime: string;
 }
 
+export type User = {
+	user: any;
+	id: number;
+	name: string;
+	login: string;
+	email: string;
+	createdAt: string;
+	updatedAt: string;
+	feedback: [FeedbacksType];
+	access_token?: string;
+};
+
 export interface ILoginData {
 	email: string;
 	password: string;
@@ -36,3 +36,10 @@ export interface IRegisterData {
 	email: string;
 	password: string;
 }
+
+export type UserErrorResponse = {
+	status: number;
+	data: {
+		message: string;
+	};
+};

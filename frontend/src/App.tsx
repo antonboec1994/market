@@ -1,9 +1,7 @@
 import { SelectAuth } from '@/redux/auth/selectors';
 import { logout } from '@/redux/auth/slice';
 import { fetchGetCart } from '@/redux/cart/thunks';
-import { fetchBlog } from '@/redux/getBlog/thunks';
 import { fetchFeedbacks, fetchFeedbacksAll } from '@/redux/getFeedbacks/thunks';
-import { fetchGraphics } from '@/redux/getGraphics/thunks';
 import { useAppDispatch } from '@/redux/store';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -30,12 +28,6 @@ const App: React.FC = () => {
 		? isExpired(access_token_FROM_LS.user.access_token)
 		: '';
 
-	const getBlog = () => {
-		dispatch(fetchBlog());
-	};
-	const getGrapichs = () => {
-		dispatch(fetchGraphics());
-	};
 	const getCart = () => {
 		dispatch(fetchGetCart());
 	};
@@ -49,8 +41,6 @@ const App: React.FC = () => {
 		AOS.init({
 			duration: 2000,
 		});
-		getBlog();
-		getGrapichs();
 		getFeedbacksAll();
 		if (isLogged) {
 			getCart();

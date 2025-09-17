@@ -1,14 +1,12 @@
-import { SelectBlog } from '@/redux/getBlog/selectors';
-import { Status } from '@/redux/getProducts/types';
-import { useSelector } from 'react-redux';
 import Slider from 'react-slick';
 import styles from './Blog.module.scss';
+import { useGetBlogQuery } from '@/redux/getBlog/api';
 
 const Blog: React.FC = () => {
-	const { posts, status } = useSelector(SelectBlog);
+	const { data: posts, isLoading } = useGetBlogQuery();
 
 	let countToShow = 0;
-	if (posts.length <= 3) {
+	if (posts && posts.length <= 3) {
 		countToShow = posts.length;
 	} else {
 		countToShow = 3;
@@ -44,11 +42,11 @@ const Blog: React.FC = () => {
 				<div className='title_head'>
 					<h2 className='title_head__title'>блог</h2>
 				</div>
-				{status === Status.LOADING ? (
+				{isLoading ? (
 					'Идёт загрузка!'
 				) : (
 					<Slider className='blog__slider' {...settings}>
-						{posts.map((item, index) => (
+						{posts?.map((item, index) => (
 							<div className={styles.blog__item} key={index}>
 								<img
 									className={styles.blog__item_image}

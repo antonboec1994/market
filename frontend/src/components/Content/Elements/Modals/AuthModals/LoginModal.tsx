@@ -4,7 +4,6 @@ import {
 	setRegisterModalStatus,
 	setRequestError,
 } from '@/redux/auth/slice';
-import { loginUser } from '@/redux/auth/thunks';
 import { setMenuUrlValue } from '@/redux/filters/slice';
 import { useAppDispatch } from '@/redux/store';
 import { LoginSchema } from '@/utils/yup';
@@ -17,6 +16,7 @@ import { useSelector } from 'react-redux';
 import RequestError from '../../RequestError/RequestError';
 import styles from './AuthModal.module.scss';
 import { Success } from '@/errors';
+import { useLoginUserMutation } from '@/redux/auth/api';
 
 interface LoginFormInputs {
 	email: string;
@@ -25,7 +25,8 @@ interface LoginFormInputs {
 
 const LoginModal = () => {
 	const dispatch = useAppDispatch();
-	const { loginModalStatus, isLoading } = useSelector(SelectAuth);
+	const { loginModalStatus } = useSelector(SelectAuth);
+	const [loginUser, { isLoading: loginStatus }] = useLoginUserMutation();
 	const {
 		register,
 		handleSubmit,
@@ -38,24 +39,20 @@ const LoginModal = () => {
 		dispatch(setMenuUrlValue(''));
 	});
 
-	const onSubmit = async (data: any) => {
-		dispatch(setRequestError(''));
+	const onSubmit = async (data: LoginFormInputs) => {
 		const userData = {
 			email: data.email,
 			password: data.password,
 		};
+		dispatch(setRequestError(''));
 		try {
-			const res = await dispatch(loginUser(userData));
-			if ('error' in res) {
-				const errorMessage = res.payload || res.error.message;
-				dispatch(setRequestError(errorMessage));
-			} else {
-				dispatch(setRequestError(Success.successLogin));
-				setTimeout(() => {
-					dispatch(setRequestError(''));
-					dispatch(setLoginModalStatus(false));
-				}, 2000);
-			}
+			const res = await loginUser(userData).unwrap();
+			console.log('res login ', res);
+			dispatch(setRequestError(Success.successLogin));
+			setTimeout(() => {
+				dispatch(setRequestError(''));
+				dispatch(setLoginModalStatus(false));
+			}, 2000);
 		} catch (error) {
 			dispatch(setRequestError('Произошла ошибка при входе'));
 		}
@@ -102,7 +99,7 @@ const LoginModal = () => {
 						/>
 						<RequestError error={Success.successLogin} />
 						<LoadingButton
-							loading={isLoading}
+							loading={loginStatus}
 							className={styles.button_box}
 							variant='contained'
 							type='submit'

@@ -1,13 +1,11 @@
 import LineGraphicBox from '@/components/Content/Elements/Charts/GraphicBox/LineGraphicBox';
-import { SelectGetGraphics } from '@/redux/getGraphics/selectors';
-import { Status } from '@/redux/getProducts/types';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import AreaGraphicBox from '../../../Elements/Charts/GraphicBox/AreaGraphicBox';
 import styles from '../Profile.module.scss';
+import { useGetGraphicsQuery } from '@/redux/getGraphics/api';
 
 const Dashboard: React.FC = () => {
-	const { status, favorites } = useSelector(SelectGetGraphics);
+	const { data: favorites, isLoading } = useGetGraphicsQuery();
 
 	const filteredArray = useMemo(() => {
 		return favorites?.filter(
@@ -19,12 +17,12 @@ const Dashboard: React.FC = () => {
 	return (
 		<>
 			<div className={styles.title}>Статистика</div>
-			{status === Status.LOADING ? (
+			{isLoading ? (
 				'Идёт загрузка!'
 			) : (
 				<>
 					<div className={styles.graphicBoxWrapper}>
-						{filteredArray.map((item: any, index: number) => {
+						{filteredArray?.map((item: any, index: number) => {
 							return <AreaGraphicBox key={index} item={item} />;
 						})}
 						<LineGraphicBox array={filteredArray} />

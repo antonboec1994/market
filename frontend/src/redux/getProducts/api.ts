@@ -21,6 +21,7 @@ export const getProductsApi = createApi({
 					response.data.message ||
 					'Произошла ошибка при загрузке данных продукты',
 			}),
+			providesTags: ['Products'],
 			keepUnusedDataFor: 600,
 		}),
 
@@ -75,6 +76,7 @@ export const getProductsApi = createApi({
 					console.error('Ошибка при получении headersCount', error);
 				}
 			},
+			providesTags: ['Products'],
 			keepUnusedDataFor: 600,
 		}),
 	}),
