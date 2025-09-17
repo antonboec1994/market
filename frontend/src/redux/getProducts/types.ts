@@ -17,6 +17,7 @@ export type ProductType = {
 	saler?: boolean;
 	bestRating?: boolean;
 	saveImage?: string;
+	hotImage?: string;
 };
 
 export type ProductsFilteredResponse = {

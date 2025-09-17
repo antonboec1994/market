@@ -23,9 +23,11 @@ const SliderHot = () => {
 	const { data: productsAll } = useGetProductsQuery();
 	const { isLogged } = useSelector(SelectAuth);
 
-	const findProducts = productsAll?.filter(item => {
-		return item?.hotImage;
-	});
+	const findProducts = productsAll
+		? productsAll?.filter(item => {
+				return item?.hotImage;
+		  })
+		: [];
 
 	return (
 		<Slider className='sliders__slider_hot' {...settings}>
@@ -45,7 +47,7 @@ const SliderHot = () => {
 						</Link>
 						<div className={styles.slide__info_links}>
 							<ViewBtn itemId={item?.id} />
-							{isLogged && <AddToCartBtn item={item} />}
+							{isLogged && <AddToCartBtn product={item} />}
 						</div>
 					</div>
 				</div>
