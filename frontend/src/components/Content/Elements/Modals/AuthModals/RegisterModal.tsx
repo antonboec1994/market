@@ -42,6 +42,7 @@ const RegisterModal = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<RegisterFormInputs>({
 		resolver: yupResolver(RegisterSchema),
 	});
@@ -77,12 +78,15 @@ const RegisterModal = () => {
 				password: data.password,
 			}).unwrap();
 			dispatch(setRequestError(Success.successRegister));
+			reset();
 			setTimeout(() => {
 				dispatch(setRequestError(''));
 				dispatch(setRegisterModalStatus(false));
 			}, 2000);
-		} catch (error) {
-			dispatch(setRequestError('Произошла ошибка при регистрации'));
+		} catch (error: any) {
+			dispatch(
+				setRequestError(error.message || 'Произошла ошибка при регистрации')
+			);
 		}
 	};
 

@@ -1,14 +1,14 @@
+import { SelectFilters } from '@/redux/filters/selectors';
+import { setSearchModal, setSearchValue } from '@/redux/filters/slice';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
+import type { ProductType } from '@/redux/getProducts/types';
+import { useAppDispatch } from '@/redux/store';
 import debounce from 'lodash.debounce';
 import { useCallback, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { setSearchModal, setSearchValue } from '@/redux/filters/slice';
-import { SelectFilters } from '@/redux/filters/selectors';
-import type { ProductType } from '@/redux/getProducts/types';
-import { useAppDispatch } from '@/redux/store';
 import styles from './Search.module.scss';
-import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 type SearchPropsType = {
 	scrollPosition: number;
@@ -17,7 +17,9 @@ type SearchPropsType = {
 const Search: React.FC<SearchPropsType> = ({ scrollPosition }) => {
 	const dispatch = useAppDispatch();
 	const { searchValue, searchModal } = useSelector(SelectFilters);
-	const { data: products, isLoading } = useGetProductsQuery();
+	const { data, isLoading } = useGetProductsQuery({});
+
+	const products = data?.items;
 
 	const searchRef = useRef(null);
 

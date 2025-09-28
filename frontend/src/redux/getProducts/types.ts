@@ -20,7 +20,7 @@ export type ProductType = {
 	hotImage?: string;
 };
 
-export type ProductsFilteredResponse = {
+export type ProductsResponse = {
 	items: ProductType[];
 	headersCount: number;
 };

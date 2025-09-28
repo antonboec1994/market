@@ -9,12 +9,15 @@ import {
 import RequestError from '@/components/Content/Elements/RequestError/RequestError';
 import { Success } from '@/errors';
 import { logout, setRequestError } from '@/redux/auth/slice';
-import { updateUserPassword } from '@/redux/auth/thunks';
 import { useAppDispatch } from '@/redux/store';
 import { UpdatePasswordSchema } from '@/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import styles from '../../../Elements/Modals/AuthModals/AuthModal.module.scss';
+import { useUpdatePasswordMutation } from '@/redux/auth/api';
+import type { IUpdateUserPassword } from '@/redux/auth/types';
+import { useSelector } from 'react-redux';
+import { SelectAuth } from '@/redux/auth/selectors';
 
 interface UpdatePasswordInputs {
 	oldPassword: string;
@@ -24,35 +27,38 @@ interface UpdatePasswordInputs {
 
 const ChangePassword = () => {
 	const dispatch = useAppDispatch();
+	const [updatePassword] = useUpdatePasswordMutation();
+	const { userData } = useSelector(SelectAuth);
+
+	const userId = userData?.user.id;
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<UpdatePasswordInputs>({
 		resolver: yupResolver(UpdatePasswordSchema),
 	});
 
-	const onSubmit = async (data: any) => {
-		dispatch(setRequestError(''));
-		const userData = {
+	const onSubmit = async (data: IUpdateUserPassword) => {
+		const updatedPassword = {
 			oldPassword: data.oldPassword,
 			newPassword: data.newPassword,
 		};
+		dispatch(setRequestError(''));
+		if (!userId) return;
 		try {
-			const res = await dispatch(updateUserPassword(userData));
-			if ('error' in res) {
-				const errorMessage = res.payload || res.error.message;
-				dispatch(setRequestError(errorMessage));
-			} else {
-				dispatch(setRequestError(Success.successUpdatePassword));
-				setTimeout(() => {
-					setRequestError('');
-					dispatch(logout());
-				}, 2000);
-			}
-		} catch (error) {
-			dispatch(setRequestError('Произошла ошибка при смене пароля'));
+			await updatePassword({ id: userId, updatedPassword });
+			dispatch(setRequestError(Success.successUpdatePassword));
+			reset();
+			setTimeout(() => {
+				dispatch(logout());
+			}, 2000);
+		} catch (error: any) {
+			dispatch(
+				setRequestError(error.message || 'Произошла ошибка при смене пароля')
+			);
 		}
 	};
 

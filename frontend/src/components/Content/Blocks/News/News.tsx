@@ -7,8 +7,10 @@ import type { ProductType } from '@/redux/getProducts/types';
 import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const News: React.FC = () => {
-	const { data: products, isLoading } = useGetProductsQuery();
+	const { data, isLoading } = useGetProductsQuery({});
 	const newsRef = useRef<HTMLElement>(null);
+
+	const products = data?.items;
 
 	const executeScroll = () => newsRef?.current?.scrollIntoView();
 	React.useEffect(() => {

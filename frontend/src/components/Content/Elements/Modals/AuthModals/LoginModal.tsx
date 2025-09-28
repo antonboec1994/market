@@ -17,6 +17,7 @@ import RequestError from '../../RequestError/RequestError';
 import styles from './AuthModal.module.scss';
 import { Success } from '@/errors';
 import { useLoginUserMutation } from '@/redux/auth/api';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormInputs {
 	email: string;
@@ -24,6 +25,7 @@ interface LoginFormInputs {
 }
 
 const LoginModal = () => {
+	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 	const { loginModalStatus } = useSelector(SelectAuth);
 	const [loginUser, { isLoading: loginStatus }] = useLoginUserMutation();
@@ -31,6 +33,7 @@ const LoginModal = () => {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<LoginFormInputs>({
 		resolver: yupResolver(LoginSchema),
 	});
@@ -47,14 +50,15 @@ const LoginModal = () => {
 		dispatch(setRequestError(''));
 		try {
 			const res = await loginUser(userData).unwrap();
-			console.log('res login ', res);
 			dispatch(setRequestError(Success.successLogin));
+			reset();
 			setTimeout(() => {
 				dispatch(setRequestError(''));
 				dispatch(setLoginModalStatus(false));
+				navigate(`/profile/${res.user.id}`);
 			}, 2000);
-		} catch (error) {
-			dispatch(setRequestError('Произошла ошибка при входе'));
+		} catch (error: any) {
+			dispatch(setRequestError(error.message || 'Произошла ошибка при входе'));
 		}
 	};
 

@@ -10,6 +10,32 @@ import { FeedbackDTO } from './feedback.dto';
 export class FeedbackService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getFeedbacks(userId: number | null) {
+    const where = userId ? { userId: userId } : {};
+    const message = userId
+      ? `Отзывы текущего пользователя ${userId} успешно получены`
+      : 'Все отзывы успешно получены';
+
+    const feedbacks = await this.prisma.feedbacks.findMany({
+      where,
+      orderBy: {
+        id: 'desc',
+      },
+      include: {
+        users: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+    });
+    return {
+      message: message,
+      feedbacks: feedbacks,
+    };
+  }
+
   async addFeedback(userId: number, dto: FeedbackDTO) {
     const existsUser = await this.prisma.users.findUnique({
       where: {
@@ -39,51 +65,10 @@ export class FeedbackService {
     };
   }
 
-  async getFeedbacks(userId: number) {
-    const feedbacks = await this.prisma.feedbacks.findMany({
-      where: { userId },
-      orderBy: {
-        id: 'desc',
-      },
-      include: {
-        users: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
-    return {
-      message: 'Все отзывы текущего пользователя успешно получены',
-      data: { feedbacks },
-    };
-  }
-
-  async getFeedbacksAll() {
-    const feedbacks = await this.prisma.feedbacks.findMany({
-      orderBy: {
-        id: 'desc',
-      },
-      include: {
-        users: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
-    return {
-      message: 'Все отзывы успешно получены',
-      data: { feedbacks },
-    };
-  }
-
-  async deleteFeedback(userId: number, feedbackId: string) {
+  async deleteFeedback(feedbackId: number, userId: number) {
     const feedback = await this.prisma.feedbacks.findUnique({
       where: {
-        id: Number(feedbackId),
+        id: feedbackId,
       },
     });
     if (!feedback) {
@@ -94,7 +79,7 @@ export class FeedbackService {
     }
     await this.prisma.feedbacks.delete({
       where: {
-        id: Number(feedbackId),
+        id: feedbackId,
       },
     });
     return {

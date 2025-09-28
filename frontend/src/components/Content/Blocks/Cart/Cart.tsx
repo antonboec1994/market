@@ -1,29 +1,31 @@
 import AddToCartCalcform from '@/components/Content/Elements/Buttons/AddToCartCalcform';
 import DeleteFromCartBtn from '@/components/Content/Elements/Buttons/DeleteFromCartBtn';
 import { SelectAuth } from '@/redux/auth/selectors';
-import { SelectCart } from '@/redux/cart/selectors';
+import { useClearCartMutation, useGetCartQuery } from '@/redux/cart/api';
 import { setOrderModalStatus } from '@/redux/cart/slice';
-import { clearCart, fetchGetCart } from '@/redux/cart/thunks';
 import { useAppDispatch } from '@/redux/store';
 import { formatNumber } from '@/utils/formatNumbers';
 import { normalize_count_form } from '@/utils/normalizeWordsForm';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styles from './Cart.module.scss';
-import type { CardTypeInCart } from '@/redux/cart/types';
+import type { ProductInCart } from '@/redux/cart/types';
 
 const Cart: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { isLogged } = useSelector(SelectAuth);
-	const { productsInCart } = useSelector(SelectCart);
+	const { data } = useGetCartQuery();
+	const [clearCart] = useClearCartMutation();
+	const productsInCart = data?.cart || [];
 
 	const sumCountInCart = () => {
 		const cart = localStorage.getItem('cart');
+
 		if (!cart) return 0;
 		try {
 			const parsedCart = JSON.parse(cart);
-			return parsedCart.reduce(
-				(sum: number, item: CardTypeInCart) => sum + item.count,
+			return parsedCart.cart.reduce(
+				(sum: number, item: any) => sum + item.count,
 				0
 			);
 		} catch (error) {
@@ -36,8 +38,8 @@ const Cart: React.FC = () => {
 		if (!cart) return 0;
 		try {
 			const parsedCart = JSON.parse(cart);
-			return parsedCart.reduce(
-				(sum: number, item: CardTypeInCart) => sum + item.price * item.count,
+			return parsedCart.cart.reduce(
+				(sum: number, item: any) => sum + item.price * item.count,
 				0
 			);
 		} catch (error) {
@@ -50,9 +52,8 @@ const Cart: React.FC = () => {
 		if (!cart) return 0;
 		try {
 			const parsedCart = JSON.parse(cart);
-			return parsedCart.reduce(
-				(sum: number, item: CardTypeInCart) =>
-					sum + item.salePrice * item.count,
+			return parsedCart.cart.reduce(
+				(sum: number, item: any) => sum + item.salePrice * item.count,
 				0
 			);
 		} catch (error) {
@@ -66,15 +67,13 @@ const Cart: React.FC = () => {
 	};
 
 	const onClickClear = async () => {
-		localStorage.removeItem('cart');
-		await dispatch(clearCart());
-		await dispatch(fetchGetCart());
+		await clearCart().unwrap();
 	};
 
 	return (
 		<>
 			<div className={styles.cart}>
-				{productsInCart.length > 0 ? (
+				{productsInCart?.length > 0 ? (
 					<div className={styles.cart__inner}>
 						<div className={styles.cart__left}>
 							<div className={styles.cart__title}>Корзина</div>
@@ -85,7 +84,7 @@ const Cart: React.FC = () => {
 								Очистить корзину
 							</div>
 							<div className={styles.cart__items}>
-								{productsInCart.map((item, index) => (
+								{productsInCart?.map((item: ProductInCart, index: number) => (
 									<div className={styles.cart__item} key={index}>
 										<Link
 											className={styles.cart__item_image}

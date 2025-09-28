@@ -8,7 +8,7 @@ export const getBlogApi = createApi({
 	tagTypes: ['Blog'],
 	endpoints: build => ({
 		getBlog: build.query<PostType[], void>({
-			query: () => `/blog/get`,
+			query: () => `/blog`,
 			transformErrorResponse: (response: BlogErrorResponse) => ({
 				status: response.data,
 				message:

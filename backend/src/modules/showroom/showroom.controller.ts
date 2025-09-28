@@ -8,7 +8,7 @@ import { ShowroomService } from './showroom.service';
 export class ShowroomController {
   constructor(private readonly ShowroomService: ShowroomService) {}
 
-  @Get('get')
+  @Get()
   @ApiOperation({ summary: 'Получить все шоурум' })
   @ApiResponse({ status: 200, description: 'Список шоурум' })
   async getAll() {

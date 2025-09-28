@@ -3,24 +3,27 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 import type {
 	ILoginData,
 	IRegisterData,
-	User,
+	IUpdateUserData,
+	IUpdateUserPassword,
+	UserData,
 	UserErrorResponse,
 } from './types';
+import { cartApi } from '../cart/api';
 
 export const userApi = createApi({
 	reducerPath: 'userApi',
 	baseQuery: fetchBaseQuery({
 		baseUrl: API_URL,
 		prepareHeaders: headers => {
-			const user = localStorage.getItem('user');
-			const token = user ? JSON.parse(user)?.access_token : '';
+			const userData = localStorage.getItem('userData');
+			const token = userData ? JSON.parse(userData)?.access_token : null;
 			token && headers.set('Authorization', `Bearer ${token}`);
 			return headers;
 		},
 	}),
 	tagTypes: ['User'],
 	endpoints: build => ({
-		registerUser: build.mutation<User, IRegisterData>({
+		registerUser: build.mutation<UserData, IRegisterData>({
 			query: newUser => ({
 				url: `/users/register`,
 				method: 'POST',
@@ -35,7 +38,7 @@ export const userApi = createApi({
 			invalidatesTags: ['User'],
 		}),
 
-		loginUser: build.mutation<User, ILoginData>({
+		loginUser: build.mutation<UserData, ILoginData>({
 			query: userData => ({
 				url: `/users/login`,
 				method: 'POST',
@@ -47,14 +50,77 @@ export const userApi = createApi({
 					response.data.message || 'Произошла ошибка при логине пользователя',
 			}),
 			invalidatesTags: ['User'],
-			async onQueryStarted(_, { queryFulfilled }) {
+			async onQueryStarted(_, { dispatch, queryFulfilled }) {
 				try {
-					const { data: user } = await queryFulfilled;
-					localStorage.setItem('user', JSON.stringify(user));
+					const { data: userData } = await queryFulfilled;
+					localStorage.setItem('userData', JSON.stringify(userData));
+					dispatch(cartApi.endpoints.getCart.initiate());
 				} catch (error) {}
 			},
+		}),
+
+		updateUser: build.mutation<
+			UserData,
+			{ id: number; updatedUserData: IUpdateUserData }
+		>({
+			query: ({ id, updatedUserData }) => ({
+				url: `/users/${id}`,
+				method: 'PATCH',
+				body: updatedUserData,
+			}),
+			transformErrorResponse: (response: UserErrorResponse) => ({
+				status: response.data,
+				message:
+					response.data.message ||
+					'Произошла ошибка при обновлении данных пользователя',
+			}),
+			invalidatesTags: ['User'],
+			async onQueryStarted(_, { queryFulfilled }) {
+				try {
+					const { data: updatedUserData } = await queryFulfilled;
+					localStorage.setItem('userData', JSON.stringify(updatedUserData));
+				} catch (error) {}
+			},
+		}),
+
+		updatePassword: build.mutation<
+			void,
+			{ id: number; updatedPassword: IUpdateUserPassword }
+		>({
+			query: ({ id, updatedPassword }) => ({
+				url: `/users/${id}/password`,
+				method: 'PATCH',
+				body: updatedPassword,
+			}),
+			transformErrorResponse: (response: UserErrorResponse) => ({
+				status: response.data,
+				message:
+					response.data.message ||
+					'Произошла ошибка при обновлении пароля пользователя',
+			}),
+			invalidatesTags: ['User'],
+		}),
+
+		deleteAccount: build.mutation<void, number>({
+			query: id => ({
+				url: `/users/${id}`,
+				method: 'DELETE',
+			}),
+			transformErrorResponse: (response: UserErrorResponse) => ({
+				status: response.data,
+				message:
+					response.data.message ||
+					'Произошла ошибка при обновлении пароля пользователя',
+			}),
+			invalidatesTags: ['User'],
 		}),
 	}),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = userApi;
+export const {
+	useRegisterUserMutation,
+	useLoginUserMutation,
+	useUpdateUserMutation,
+	useUpdatePasswordMutation,
+	useDeleteAccountMutation,
+} = userApi;

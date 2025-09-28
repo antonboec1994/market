@@ -10,10 +10,8 @@ export const Errors = {
 export const Success = {
 	successLogin: 'Вход выполнен успешно, окно закроется автоматически',
 	successRegister: 'Регистрация прошла успешно, окно закроется автоматически',
-	successUpdateUser:
-		'Данные пользователя успешно обновлены, окно закроется автоматически',
-	successUpdatePassword:
-		'Пароль пользователя успешно обновлён, окно закроется автоматически',
+	successUpdateUser: 'Данные пользователя успешно обновлены',
+	successUpdatePassword: 'Пароль пользователя успешно обновлён',
 	successDeleteUser: 'Аккаунт успешно удалён',
 	successAddedFeedback: 'Отзыв успешно добавлен',
 };

@@ -4,7 +4,7 @@ import banner from '../../../../assets/images/gallery/banner.jpg';
 import styles from './Gallery.module.scss';
 import GalleryItem from './GalleryItem/GalleryItem';
 import { useGetProductsQuery } from '@/redux/getProducts/api';
-import { useFindProductByAttribute } from '@/utils/useFindProductByAttribute';
+import { useFindProductByAttribute } from '@/utils/customHooks/useFindProductByAttribute';
 
 export const tabsList = [
 	{ id: 0, title: 'Рекомендуемое' },
@@ -14,7 +14,7 @@ export const tabsList = [
 ];
 
 const Gallery: React.FC = () => {
-	const { isLoading } = useGetProductsQuery();
+	const { isLoading } = useGetProductsQuery({});
 	const [tabSelected, setTabSelected] = useState(0);
 
 	// ✅ Все хуки — здесь, до return

@@ -8,7 +8,7 @@ export const getShowroomApi = createApi({
 	tagTypes: ['Showroom'],
 	endpoints: build => ({
 		getShowroom: build.query<ShowroomType[], void>({
-			query: () => `/showroom/get`,
+			query: () => `/showroom`,
 			transformErrorResponse: (response: ShowroomErrorResponse) => ({
 				status: response.data,
 				message:

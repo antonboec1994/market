@@ -55,9 +55,9 @@ const profileRoutes: ProfileRoutesType[] = [
 
 const ProfilePage: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { user, isLogged } = useSelector(SelectAuth);
+	const { userData, isLogged } = useSelector(SelectAuth);
 	const { menuUrlValue } = useSelector(SelectFilters);
-	const currentUser = user && user;
+	const currentUser = userData?.user;
 
 	const sidebarMenu: SidebarMenuType[] = [
 		{

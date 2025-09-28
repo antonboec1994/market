@@ -8,22 +8,13 @@ import { ProductFilterDto } from './product.dto';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @Get('getAll')
+  @Get()
   @ApiOperation({
-    summary: 'Получить все продукты ',
-  })
-  @ApiResponse({ status: 200, description: 'Список продуктов' })
-  async getAllProducts() {
-    return this.productService.getAllProducts();
-  }
-
-  @Get('get')
-  @ApiOperation({
-    summary: 'Получить продукты по фильтрации, или по поиску',
+    summary: 'Получить продукты (с фильтрацией, пагинацией, сортировкой)',
   })
   @ApiResponse({
     status: 200,
-    description: 'Список продуктов по фильтрации, или по поиску',
+    description: 'Список продуктов',
   })
   async getProducts(@Query() filters: ProductFilterDto) {
     return this.productService.getProducts(filters);

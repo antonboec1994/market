@@ -7,7 +7,7 @@ import { BlogService } from './blog.service';
 export class BlogController {
   constructor(private readonly BlogService: BlogService) {}
 
-  @Get('get')
+  @Get()
   @ApiOperation({ summary: 'Получить все статьи' })
   @ApiResponse({ status: 200, description: 'Список блогов' })
   async getAll() {

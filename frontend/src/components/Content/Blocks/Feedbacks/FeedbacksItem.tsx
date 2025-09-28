@@ -1,20 +1,25 @@
 import StarRating from '@/components/Content/Elements/StarRating/StarRating';
-import { deleteFeedback } from '@/redux/getFeedbacks/thunks';
-import type { FeedbacksType } from '@/redux/getFeedbacks/types';
 import {
 	ntfMessageDeletefeedback,
 	ntfTypeDeletefeedback,
 } from '@/redux/notification/consts';
-import { useAppDispatch } from '@/redux/store';
 import { DispatchNotification } from '@/utils/notificationDispatch';
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CSSTransition } from 'react-transition-group';
 import styles from './Feedbacks.module.scss';
 import { useGetProductsQuery } from '@/redux/getProducts/api';
+import type { ProductType } from '@/redux/getProducts/types';
+import {
+	useDeleteFeedbackMutation,
+	useGetFeedbacksQuery,
+} from '@/redux/getFeedbacks/api';
+import type { FeedbackType } from '@/redux/getFeedbacks/types';
+import { useSelector } from 'react-redux';
+import { SelectAuth } from '@/redux/auth/selectors';
 
 type feedbackItemProps = {
-	item: FeedbacksType;
+	item: FeedbackType;
 	ix: number;
 	initialCountfeedbackToShow?: number;
 };
@@ -24,15 +29,21 @@ const FeedbacksItem: React.FC<feedbackItemProps> = ({
 	ix,
 	initialCountfeedbackToShow,
 }) => {
-	const dispatch = useAppDispatch();
-	const { data: productsAll } = useGetProductsQuery();
-	const currentfeedbackProductId = item?.productId;
+	const { data } = useGetProductsQuery({});
+	const [deleteFeedback] = useDeleteFeedbackMutation();
 	const location = useLocation();
 	const [show, setShow] = useState(false);
+	const { userData } = useSelector(SelectAuth);
+	const userId = userData?.user.id;
+	const { refetch } = useGetFeedbacksQuery({ userId });
+
 	const pathnameProduct = location.pathname.includes('product');
 	const pathnameProfile = location.pathname.includes('profile');
 
-	const findProduct = productsAll?.find(item => {
+	const currentfeedbackProductId = item?.productId;
+	const productsAll = data?.items;
+
+	const findProduct = productsAll?.find((item: ProductType) => {
 		return item?.id === currentfeedbackProductId;
 	});
 
@@ -49,21 +60,21 @@ const FeedbacksItem: React.FC<feedbackItemProps> = ({
 	};
 
 	const feedbackDelete = async () => {
+		if (!item.id) return;
 		if (window.confirm('Удалить выбранный отзыв?')) {
-			const res = await dispatch(deleteFeedback(item.id));
-			if (res.meta.requestStatus === 'fulfilled') {
-				window.alert('Отзыв успешно удалён');
-				findProduct &&
-					DispatchNotification(
-						true,
-						findProduct,
-						ntfMessageDeletefeedback,
-						ntfTypeDeletefeedback
-					);
+			try {
+				await deleteFeedback({ id: item.id }).unwrap();
+				refetch();
 				window.location.reload();
-			} else {
-				const errorMessage = res.payload || 'Неизвестная ошибка';
-				window.alert(`Ошибка ${errorMessage}`);
+				window.alert('Отзыв успешно удалён');
+				DispatchNotification(
+					true,
+					findProduct,
+					ntfMessageDeletefeedback,
+					ntfTypeDeletefeedback
+				);
+			} catch (error: any) {
+				window.alert(`Ошибка при удалении отзыва ${error.message}`);
 			}
 		}
 	};

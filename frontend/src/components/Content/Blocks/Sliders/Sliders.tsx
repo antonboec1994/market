@@ -3,7 +3,7 @@ import SliderSave from './SliderSave/SliderSave';
 import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const Sliders = () => {
-	const { isLoading } = useGetProductsQuery();
+	const { isLoading } = useGetProductsQuery({});
 
 	return (
 		<>

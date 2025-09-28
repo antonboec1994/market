@@ -1,4 +1,3 @@
-import type { CardTypeInCart } from '@/redux/cart/types';
 import type { ProductType } from '@/redux/getProducts/types';
 import {
 	setNotificatioType,
@@ -9,7 +8,7 @@ import { store } from '@/redux/store';
 
 export const DispatchNotification = (
 	status: boolean,
-	item: CardTypeInCart | ProductType,
+	item: any | ProductType,
 	message: string,
 	type: string
 ) => {

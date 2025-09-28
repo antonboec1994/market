@@ -43,13 +43,26 @@ export class ProductService {
     });
   }
 
-  async getAllProducts() {
-    return await this.prisma.products.findMany();
-  }
-
   async getProducts(filters: ProductFilterDto = {}) {
-    const where: any = {};
+    const hasAnyFilter = Object.keys(filters).some((key) => {
+      return (
+        key !== '_page' &&
+        key !== '_limit' &&
+        key !== '_sort' &&
+        key !== '_order'
+      );
+    });
+    if (!hasAnyFilter && !filters._sort) {
+      const items = await this.prisma.products.findMany({
+        orderBy: this.getOrderBy(filters._sort, filters._order),
+      });
+      return {
+        items,
+        headersCount: items.length,
+      };
+    }
 
+    const where: any = {};
     if (filters.category !== undefined) {
       where.category = filters.category;
     }
@@ -73,11 +86,9 @@ export class ProductService {
         where.salePrice.lte = filters.salePrice_lte;
       }
     }
-
     const page = filters._page ?? 1;
     const limit = filters._limit ?? 10;
     const skip = (page - 1) * limit;
-
     const [items, totalCount] = await Promise.all([
       this.prisma.products.findMany({
         where,

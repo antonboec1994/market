@@ -22,10 +22,10 @@ import { useAppDispatch } from '@/redux/store';
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './Catalog.module.scss';
-import { useGetProductsByFilterQuery } from '@/redux/getProducts/api';
 import { useNavigate } from 'react-router-dom';
 import { menuList } from '@/redux/filters/consts';
 import qs from 'qs';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const Catalog = () => {
 	const dispatch = useAppDispatch();
@@ -41,7 +41,7 @@ const Catalog = () => {
 		activeColor,
 		filterResults,
 	} = useSelector(SelectFilters);
-	const { data: productsByFilter, isLoading } = useGetProductsByFilterQuery({
+	const { data, isLoading } = useGetProductsQuery({
 		activeCategory,
 		activeRating,
 		currentPage,
@@ -50,7 +50,7 @@ const Catalog = () => {
 		activeSort,
 		priceMinMax,
 	});
-	const products = productsByFilter?.items;
+	const products = data?.items;
 
 	const resultCatalog = {
 		activeSort: activeSort.name,

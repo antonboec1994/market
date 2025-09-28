@@ -9,12 +9,15 @@ import {
 
 import RequestError from '@/components/Content/Elements/RequestError/RequestError';
 import { logout, setRequestError } from '@/redux/auth/slice';
-import { updateUser } from '@/redux/auth/thunks';
 import { UpdateNameSchema } from '@/utils/yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import styles from '../../../Elements/Modals/AuthModals/AuthModal.module.scss';
 import { Success } from '@/errors';
+import type { IUpdateUserData } from '@/redux/auth/types';
+import { useUpdateUserMutation } from '@/redux/auth/api';
+import { useSelector } from 'react-redux';
+import { SelectAuth } from '@/redux/auth/selectors';
 
 interface UpdateUserFormInputs {
 	email: string;
@@ -24,37 +27,40 @@ interface UpdateUserFormInputs {
 
 const UpdateUser = () => {
 	const dispatch = useAppDispatch();
+	const { userData } = useSelector(SelectAuth);
+	const [updateUser] = useUpdateUserMutation();
+	const userId = userData?.user?.id;
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		reset,
 	} = useForm<UpdateUserFormInputs>({
 		resolver: yupResolver(UpdateNameSchema),
 	});
 
-	const onSubmit = async (data: any) => {
-		dispatch(setRequestError(''));
-		const userData = {
+	const onSubmit = async (data: IUpdateUserData) => {
+		const updatedUserData = {
 			email: data.email,
 			login: data.login,
 			name: data.name,
 		};
-
+		dispatch(setRequestError(''));
+		if (!userId) return;
 		try {
-			const res = await dispatch(updateUser(userData));
-			if ('error' in res) {
-				const errorMessage = res.payload || res.error.message;
-				dispatch(setRequestError(errorMessage));
-			} else {
-				dispatch(setRequestError(Success.successUpdateUser));
-				setTimeout(() => {
-					dispatch(setRequestError(''));
-					dispatch(logout());
-				}, 2000);
-			}
-		} catch (error) {
-			dispatch(setRequestError('Произошла ошибка при смене данных'));
+			await updateUser({ id: userId, updatedUserData }).unwrap();
+			dispatch(setRequestError(Success.successUpdateUser));
+			reset();
+			setTimeout(() => {
+				dispatch(logout());
+			}, 2000);
+		} catch (error: any) {
+			dispatch(
+				setRequestError(
+					error.message || 'Произошла ошибка при смене данных пользователя'
+				)
+			);
 		}
 	};
 

@@ -1,18 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { calcTotalCount, calcTotalPrice } from '@/utils/calcCart';
 import { getCartFromLS } from '@/utils/cartLS/getCartFromLS';
-import { fetchGetCart } from './thunks';
-import { Status } from '../getProducts/types';
-import type { CartSliceState } from './types';
+import type { CartData, CartSliceState } from './types';
+import { cartApi } from './api';
 
-const { productsInCartFromLS } = getCartFromLS();
+const storedCart = getCartFromLS();
 
 const initialState: CartSliceState = {
-	productsInCart: productsInCartFromLS,
-	totalCountInCart: calcTotalCount(productsInCartFromLS),
-	totalPriceInCart: calcTotalPrice(productsInCartFromLS),
-	totalSalePriceInCart: calcTotalPrice(productsInCartFromLS),
-	statusInCart: Status.LOADING,
+	productsInCart: storedCart.cart,
+	totalCountInCart: calcTotalCount(storedCart.cart),
+	totalPriceInCart: calcTotalPrice(storedCart.cart),
+	totalSalePriceInCart: calcTotalPrice(storedCart.cart),
 	cartModalStatus: false,
 	orderModalStatus: false,
 };
@@ -29,16 +27,12 @@ const cartSlice = createSlice({
 		},
 	},
 	extraReducers: builder => {
-		builder.addCase(fetchGetCart.pending, state => {
-			state.statusInCart = Status.LOADING;
-		});
-		builder.addCase(fetchGetCart.fulfilled, (state, action) => {
-			state.statusInCart = Status.SUCCESS;
-			state.productsInCart = action.payload.data.cart;
-		});
-		builder.addCase(fetchGetCart.rejected, state => {
-			state.statusInCart = Status.ERROR;
-		});
+		builder.addMatcher(
+			cartApi.endpoints.getCart.matchFulfilled,
+			(state, action: PayloadAction<CartData>) => {
+				state.productsInCart = action.payload.cart;
+			}
+		);
 	},
 });
 

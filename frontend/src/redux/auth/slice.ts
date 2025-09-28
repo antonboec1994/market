@@ -1,39 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
-import moment from 'moment';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { getUserFromLs } from '@/utils/authLS/getUserFromLS';
-import { getUser } from './thunks';
-import type { AuthSliceState } from './types';
+import type { AuthSliceState, UserData } from './types';
 import { userApi } from './api';
 
-const { user } = getUserFromLs();
-
-const getUserData = () => {
-	if (user?.user && user.user.createdAt && user.user.updatedAt) {
-		return {
-			user: user.user,
-			createdDate: moment(user.user.createdAt).format('DD.MM.YY'),
-			createdTime: moment(user.user.createdAt).format('HH:mm'),
-			updatedDate: moment(user.user.updatedAt).format('DD.MM.YY'),
-			updatedTime: moment(user.user.updatedAt).format('HH:mm'),
-		};
-	} else {
-		return {
-			user: user.user || null,
-			createdDate: '',
-			createdTime: '',
-			updatedDate: '',
-			updatedTime: '',
-		};
-	}
-};
+const storedUser = getUserFromLs();
 
 const initialState: AuthSliceState = {
-	...getUserData(),
-	isLogged: Object.keys(user).length !== 0,
+	userData: storedUser,
+	isLogged: !!storedUser,
 	registerModalStatus: false,
 	loginModalStatus: false,
 	requestError: '',
-	isLoading: false,
 };
 
 export const authSlice = createSlice({
@@ -42,7 +19,8 @@ export const authSlice = createSlice({
 	reducers: {
 		logout(state) {
 			state.isLogged = false;
-			localStorage.removeItem('user');
+			state.userData = null;
+			localStorage.removeItem('userData');
 			localStorage.removeItem('cart');
 			localStorage.removeItem('notification');
 			localStorage.removeItem('feedbacks');
@@ -59,16 +37,17 @@ export const authSlice = createSlice({
 		},
 	},
 	extraReducers: builder => {
-		builder.addCase(getUser.fulfilled, (state, action) => {
-			state.user = action.payload;
-		});
-
 		builder.addMatcher(
 			userApi.endpoints.loginUser.matchFulfilled,
-			(state, action) => {
-				// state.user = action.payload;
+			(state, action: PayloadAction<UserData>) => {
+				state.userData = action.payload;
 				state.isLogged = true;
-				console.log(' action payload login user ', action.payload);
+			}
+		);
+		builder.addMatcher(
+			userApi.endpoints.updateUser.matchFulfilled,
+			(state, action) => {
+				state.userData = action.payload;
 			}
 		);
 	},

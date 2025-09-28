@@ -1,7 +1,5 @@
-import type { CardTypeInCart } from '../cart/types';
-
 export type NotificationInfo = {
-	item: CardTypeInCart;
+	item: any;
 	message: string;
 	type: string;
 };

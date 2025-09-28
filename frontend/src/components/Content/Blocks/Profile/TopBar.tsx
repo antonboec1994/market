@@ -1,4 +1,4 @@
-import { SelectAuth } from '@/redux/auth/selectors';
+import { SelectAuth, SelectAuthValues } from '@/redux/auth/selectors';
 import { SelectNotification } from '@/redux/notification/selectors';
 import { useAppDispatch } from '@/redux/store';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -16,13 +16,14 @@ import styles from './Profile.module.scss';
 
 const TopBar: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { user, createdDate, createdTime, updatedDate, updatedTime } =
-		useSelector(SelectAuth);
+	const { userData } = useSelector(SelectAuth);
+	const { createdDate, createdTime, updatedDate, updatedTime } =
+		useSelector(SelectAuthValues);
 	const [modal, setModal] = useState<boolean>(false);
 	const { notificationStatus, notificationInfo } =
 		useSelector(SelectNotification);
 
-	console.log('topbar ', user);
+	const user = userData?.user;
 
 	const notificationBtn = () => {
 		dispatch(setNotificationStatus(false));

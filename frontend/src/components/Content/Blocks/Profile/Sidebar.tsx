@@ -25,7 +25,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarMenu }) => {
 
 	const onClickLogout = () => {
 		dispatch(logout());
-		localStorage.removeItem('user');
+		localStorage.removeItem('userData');
 	};
 
 	const handleClick = (index: number) => {

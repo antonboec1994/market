@@ -1,31 +1,29 @@
 import {
-	deleteFromCart,
-	fetchGetCart,
-	minusTocart,
-	plusToCart,
-} from '@/redux/cart/thunks';
-import type { CardTypeInCart } from '@/redux/cart/types';
-import {
 	ntfMessageMinusFromCart,
 	ntfMessagePlusToCart,
 	ntfTypeMinusFromCart,
 	ntfTypePlusToCart,
 } from '@/redux/notification/consts';
 import { SelectNotification } from '@/redux/notification/selectors';
-import { useAppDispatch } from '@/redux/store';
 import { DispatchNotification } from '@/utils/notificationDispatch';
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './Buttons.module.scss';
+import {
+	useDeleteProductMutation,
+	useUpdateCountMutation,
+} from '@/redux/cart/api';
+import type { ProductInCart } from '@/redux/cart/types';
 
 type AddToCartCalcformProps = {
-	item: CardTypeInCart;
+	item: ProductInCart;
 };
 
 const AddToCartCalcform: React.FC<AddToCartCalcformProps> = ({ item }) => {
-	const dispatch = useAppDispatch();
 	const { notificationInfo } = useSelector(SelectNotification);
 	const isMounted = useRef(false);
+	const [updateCount] = useUpdateCountMutation();
+	const [deleteProduct] = useDeleteProductMutation();
 
 	useEffect(() => {
 		if (isMounted.current) {
@@ -36,49 +34,32 @@ const AddToCartCalcform: React.FC<AddToCartCalcformProps> = ({ item }) => {
 	}, [notificationInfo]);
 
 	const minusItem = async () => {
-		const itemForCart = {
-			productId: item.productId,
-			imageUrl: item.imageUrl,
-			name: item.name,
-			price: item.price,
-			salePrice: item.salePrice,
-			count: item.count,
-			currentTotalPrice: item.currentTotalPrice,
-			currentTotalSalePrice: item.currentTotalSalePrice,
-		};
-		if (item.count > 1) {
-			await dispatch(minusTocart(itemForCart));
-			DispatchNotification(
-				true,
-				itemForCart,
-				ntfMessageMinusFromCart,
-				ntfTypeMinusFromCart
-			);
-		} else {
-			await dispatch(deleteFromCart(itemForCart.productId));
+		if (!item.id) return;
+		try {
+			if (item.count > 1) {
+				await updateCount({ id: item.id, count: item.count - 1 }).unwrap();
+				DispatchNotification(
+					true,
+					item,
+					ntfMessageMinusFromCart,
+					ntfTypeMinusFromCart
+				);
+			} else {
+				await deleteProduct({ id: item.id }).unwrap();
+			}
+		} catch (error) {
+			console.error('Ошибка уменьшения количества ', error);
 		}
-		await dispatch(fetchGetCart());
 	};
 
 	const plusItem = async () => {
-		const itemForCart = {
-			productId: item.productId,
-			imageUrl: item.imageUrl,
-			name: item.name,
-			price: item.price,
-			salePrice: item.salePrice,
-			count: item.count,
-			currentTotalPrice: item.currentTotalPrice,
-			currentTotalSalePrice: item.currentTotalSalePrice,
-		};
-		await dispatch(plusToCart(itemForCart));
-		await dispatch(fetchGetCart());
-		DispatchNotification(
-			true,
-			itemForCart,
-			ntfMessagePlusToCart,
-			ntfTypePlusToCart
-		);
+		if (!item.id) return;
+		try {
+			await updateCount({ id: item.id, count: item.count + 1 }).unwrap();
+			DispatchNotification(true, item, ntfMessagePlusToCart, ntfTypePlusToCart);
+		} catch (error) {
+			console.error('Ошибка увеличения количества ', error);
+		}
 	};
 
 	return (

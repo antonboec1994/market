@@ -1,4 +1,4 @@
-export type FeedbacksType = {
+export type FeedbackType = {
 	id?: number;
 	productId: number;
 	date: string;
@@ -11,10 +11,19 @@ export type FeedbacksType = {
 };
 
 export interface FeedbacksSliceState {
-	feedbacks: FeedbacksType[];
+	feedbacks: FeedbackType[];
 	feedbacksCount: number;
 	feedbackRating: number;
-	status: string;
-	feedbacksAll: FeedbacksType[];
-	statusAll: string;
 }
+
+export type FeedbacksData = {
+	feedbacks: FeedbackType[];
+	message?: string;
+};
+
+export type FeedbacksErrorResponse = {
+	status: number;
+	data: {
+		message: string;
+	};
+};

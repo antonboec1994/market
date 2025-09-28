@@ -9,7 +9,9 @@ type PopularSliderPropsType = {
 };
 
 const PopularSlider: React.FC<PopularSliderPropsType> = ({ category }) => {
-	const { data: productsAll } = useGetProductsQuery();
+	const { data } = useGetProductsQuery({});
+
+	const productsAll = data?.items;
 
 	const filterBy = (productsAll: ProductType[], field: any, value: any) => {
 		return productsAll.filter(

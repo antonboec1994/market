@@ -1,19 +1,25 @@
-import { SelectFeedbacks } from '@/redux/getFeedbacks/selectors';
-import type { FeedbacksType } from '@/redux/getFeedbacks/types';
 import { normalize_count_form_feedbacks } from '@/utils/normalizeWordsForm';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import FeedbacksItem from '../../Feedbacks/FeedbacksItem';
 import styles from '../Profile.module.scss';
+import { useGetFeedbacksQuery } from '@/redux/getFeedbacks/api';
+import { SelectAuth } from '@/redux/auth/selectors';
+import type { FeedbackType } from '@/redux/getFeedbacks/types';
 
 const ProfileFeedbacks: React.FC = () => {
-	const [showedfeedbacks, setShowedfeedbacks] = useState<FeedbacksType[]>([]);
+	const [showedfeedbacks, setShowedfeedbacks] = useState<FeedbackType[]>([]);
 	const initialCountfeedbackToShow = 2;
 	const [indexArray, setIndexArray] = useState<number>(
 		initialCountfeedbackToShow
 	);
-	const { feedbacks } = useSelector(SelectFeedbacks);
+	const { userData } = useSelector(SelectAuth);
+	const { data } = useGetFeedbacksQuery({});
+
+	const userId = userData?.user.id;
+	const feedbacks =
+		data?.feedbacks.filter(item => item.userId === userId) || [];
 
 	useEffect(() => {
 		document.addEventListener('scroll', handleScroll);
@@ -21,6 +27,12 @@ const ProfileFeedbacks: React.FC = () => {
 			document.removeEventListener('scroll', handleScroll);
 		};
 	}, []);
+
+	useEffect(() => {
+		if (isMorefeedbacksToLoad) {
+			setShowedfeedbacks(feedbacks.slice(0, indexArray));
+		}
+	}, [feedbacks, indexArray]);
 
 	const handleScroll = (e: any) => {
 		if (
@@ -32,13 +44,7 @@ const ProfileFeedbacks: React.FC = () => {
 		}
 	};
 
-	const isMorefeedbacksToLoad = feedbacks.length > showedfeedbacks.length;
-
-	useEffect(() => {
-		if (isMorefeedbacksToLoad) {
-			setShowedfeedbacks(feedbacks.slice(0, indexArray));
-		}
-	}, [feedbacks, indexArray]);
+	const isMorefeedbacksToLoad = feedbacks?.length > showedfeedbacks.length;
 
 	return (
 		<>
@@ -50,7 +56,7 @@ const ProfileFeedbacks: React.FC = () => {
 			</div>
 			<div className={styles.feedback__items}>
 				{Object.values(showedfeedbacks).map(
-					(item: FeedbacksType, index: number) => (
+					(item: FeedbackType, index: number) => (
 						<FeedbacksItem
 							item={item}
 							key={index}

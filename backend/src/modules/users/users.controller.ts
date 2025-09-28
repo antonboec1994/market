@@ -2,9 +2,12 @@ import {
   Body,
   Controller,
   Delete,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   Req,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -54,36 +57,30 @@ export class UsersController {
 
   // ------------------------------------------------
 
-  @Post('get')
-  @ApiOperation({ summary: 'Получение данных пользователя' })
-  @ApiResponse({
-    status: 200,
-    description: 'Данные пользователя успешно получены',
-  })
-  @UseGuards(JwtAuthGuard)
-  async getUser(@Req() request) {
-    const userId = request.user.id;
-    return this.userService.getUser(userId);
-  }
-
-  // ------------------------------------------------
-
-  @Patch('updateUser')
-  @ApiOperation({ summary: 'Обновление данных пользователя' })
+  @Patch(':id')
+  @ApiOperation({ summary: 'Обновление данных пользователя по ID' })
   @ApiResponse({
     status: 200,
     description: 'Данные пользователя успешно обновлены',
   })
   @UseGuards(JwtAuthGuard)
-  async updateUser(@Body() updateDto: UpdateUserDTO, @Req() request) {
-    const user = request.user as { id: number };
-    await this.userService.updateUser(user.id, updateDto);
-    return updateDto;
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDto: UpdateUserDTO,
+    @Req() request,
+  ) {
+    const currentUser = request.user as { id: number };
+    if (currentUser.id !== id) {
+      throw new UnauthorizedException(
+        'Вы можете редактировать только свой профиль',
+      );
+    }
+    return this.userService.updateUser(id, updateDto);
   }
 
   // ------------------------------------------------
 
-  @Patch('updatePassword')
+  @Patch(':id/password')
   @ApiOperation({ summary: 'Обновление пароля пользователя' })
   @ApiResponse({
     status: 200,
@@ -91,16 +88,20 @@ export class UsersController {
   })
   @UseGuards(JwtAuthGuard)
   async updatePassword(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updatePasswordDto: UpdatePasswordDTO,
     @Req() request,
   ) {
-    const user = request.user as { id: number };
-    return this.userService.updatePassword(user.id, updatePasswordDto);
+    const currentUser = request.user as { id: number };
+    if (currentUser.id !== id) {
+      throw new UnauthorizedException('Вы можете изменить только свой пароль');
+    }
+    return this.userService.updatePassword(id, updatePasswordDto);
   }
 
   // ------------------------------------------------
 
-  @Delete('delete')
+  @Delete(':id')
   @ApiOperation({ summary: 'Удаление пользователя' })
   @ApiResponse({
     status: 200,
@@ -111,8 +112,14 @@ export class UsersController {
     description: 'Пользователь не авторизован',
   })
   @UseGuards(JwtAuthGuard)
-  async delete(@Req() request): Promise<DeleteUserResponseDto> {
-    const user = request.user as { id: number };
-    return this.userService.delete(user.id);
+  async delete(
+    @Param('id', ParseIntPipe) id: number,
+    @Req() request,
+  ): Promise<DeleteUserResponseDto> {
+    const currentUser = request.user as { id: number };
+    if (currentUser.id !== id) {
+      throw new UnauthorizedException('Вы можете удалить только свой аккаунт');
+    }
+    return this.userService.delete(id);
   }
 }

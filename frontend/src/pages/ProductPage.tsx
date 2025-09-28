@@ -14,9 +14,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 const ProductPage = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const { data: productsAll, isLoading } = useGetProductsQuery();
+	const { data, isLoading } = useGetProductsQuery({});
 	const { menuUrlValue } = useSelector(SelectFilters);
 	const { id } = useParams();
+	const productsAll = data?.items;
+
 	const product = productsAll?.find(obj => obj.id === Number(id));
 	const pageTitle = product?.name;
 

@@ -1,7 +1,11 @@
-import type { User } from '@/redux/auth/types';
+import type { UserData } from '@/redux/auth/types';
 
-export const getUserFromLs = () => {
-	const userData = localStorage.getItem('user');
-	const user: User = userData ? JSON.parse(userData) : {};
-	return { user };
+export const getUserFromLs = (): UserData | null => {
+	try {
+		const userData = localStorage.getItem('userData');
+		return userData ? JSON.parse(userData) : null;
+	} catch (error) {
+		console.warn('Ошибка при загрузке из localStorage', error);
+		return null;
+	}
 };

@@ -1,7 +1,5 @@
 import { SelectAuth } from '@/redux/auth/selectors';
 import { logout } from '@/redux/auth/slice';
-import { fetchGetCart } from '@/redux/cart/thunks';
-import { fetchFeedbacks, fetchFeedbacksAll } from '@/redux/getFeedbacks/thunks';
 import { useAppDispatch } from '@/redux/store';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -22,30 +20,16 @@ import { getUserFromLs } from './utils/authLS/getUserFromLS';
 const App: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const { isLogged } = useSelector(SelectAuth);
-	const access_token_FROM_LS = getUserFromLs();
+	const userData = getUserFromLs();
 
-	const isMyTokenExpired = access_token_FROM_LS.user.access_token
-		? isExpired(access_token_FROM_LS.user.access_token)
+	const isMyTokenExpired = userData?.access_token
+		? isExpired(userData.access_token)
 		: '';
 
-	const getCart = () => {
-		dispatch(fetchGetCart());
-	};
-	const getFeedbacks = () => {
-		dispatch(fetchFeedbacks());
-	};
-	const getFeedbacksAll = () => {
-		dispatch(fetchFeedbacksAll());
-	};
 	useEffect(() => {
 		AOS.init({
 			duration: 2000,
 		});
-		getFeedbacksAll();
-		if (isLogged) {
-			getCart();
-			getFeedbacks();
-		}
 		if (isMyTokenExpired) {
 			dispatch(logout());
 		}

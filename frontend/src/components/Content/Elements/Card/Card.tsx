@@ -1,11 +1,11 @@
 import { SelectAuth } from '@/redux/auth/selectors';
+import type { ProductType } from '@/redux/getProducts/types';
+import { useAddToCart } from '@/utils/customHooks/useAddToCart';
 import { formatNumber } from '@/utils/formatNumbers';
-import { OnClickAddToCart } from '@/utils/onClickAddToCart';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import StarRating from '../StarRating/StarRating';
 import styles from './Card.module.scss';
-import type { ProductType } from '@/redux/getProducts/types';
 
 type CardPropsType = {
 	product: ProductType;
@@ -15,6 +15,7 @@ const Card: React.FC<CardPropsType> = ({ product }) => {
 	const url = typeof window !== 'undefined' ? window.location.href : '';
 	let urlPath = url.includes('catalog');
 	const { isLogged } = useSelector(SelectAuth);
+	const handleAddToCart = useAddToCart();
 
 	return (
 		<div className={urlPath ? styles.news__card_catalog : styles.news__card}>
@@ -29,7 +30,7 @@ const Card: React.FC<CardPropsType> = ({ product }) => {
 				{isLogged && (
 					<button
 						className={`${styles.card__form_button} ${styles.news__card_button}`}
-						onClick={() => OnClickAddToCart(product)}
+						onClick={() => handleAddToCart(product)}
 					>
 						<i
 							className={`${styles.card__form_button_icon} icon_shopping_basket`}

@@ -1,26 +1,29 @@
 import StarRating from '@/components/Content/Elements/StarRating/StarRating';
 import { SelectAuth } from '@/redux/auth/selectors';
 import { categoriesList } from '@/redux/filters/consts';
-import { SelectFeedbacks } from '@/redux/getFeedbacks/selectors';
-import type { FeedbacksType } from '@/redux/getFeedbacks/types';
-import { Status, type ProductType } from '@/redux/getProducts/types';
+import { type ProductType } from '@/redux/getProducts/types';
 import { formatNumber } from '@/utils/formatNumbers';
 import { normalize_count_form_feedbacks } from '@/utils/normalizeWordsForm';
-import { OnClickAddToCart } from '@/utils/onClickAddToCart';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import SliderProduct from '../Sliders/SliderProduct/SliderProduct';
 import styles from './ProductInfo.module.scss';
+import { useAddToCart } from '@/utils/customHooks/useAddToCart';
+import type { FeedbackType } from '@/redux/getFeedbacks/types';
+import { useGetFeedbacksQuery } from '@/redux/getFeedbacks/api';
 
 type ProductInfoProps = {
 	product: ProductType;
 };
 
 const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
-	const { status, feedbacksAll } = useSelector(SelectFeedbacks);
+	const { data, isLoading } = useGetFeedbacksQuery({});
 	const { isLogged } = useSelector(SelectAuth);
 	const { hash, key } = useLocation();
+	const handleAddToCart = useAddToCart();
+
+	const feedbacksAll = data?.feedbacks || [];
 
 	useEffect(() => {
 		window.scrollTo(0, 0);
@@ -33,10 +36,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
 		}
 	}, [key, hash]);
 
-	const resultFeedbacks: FeedbacksType[] =
-		status === Status.SUCCESS
-			? feedbacksAll.filter(item => item.productId === product.id)
-			: [];
+	const resultFeedbacks: FeedbackType[] = !isLoading
+		? feedbacksAll.filter((item: FeedbackType) => item.productId === product.id)
+		: [];
 
 	return (
 		<>
@@ -77,7 +79,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
 								<button
 									className={styles.product_info__card__form_button}
 									type='button'
-									onClick={() => OnClickAddToCart(product)}
+									onClick={() => handleAddToCart(product)}
 								>
 									<i className='icon_shopping_basket'></i>В корзину
 								</button>

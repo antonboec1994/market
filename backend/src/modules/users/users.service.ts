@@ -83,28 +83,6 @@ export class UsersService {
     };
   }
 
-  async getUser(userId: number) {
-    const existsUser = await this.prisma.users.findUnique({
-      where: {
-        id: userId,
-      },
-    });
-    if (!existsUser) {
-      throw new UnauthorizedException(
-        'Пользователь с таким email не существует',
-      );
-    }
-    return {
-      message: 'Пользователь успешно получен',
-      user: {
-        id: existsUser.id,
-        email: existsUser.email,
-        name: existsUser.name,
-        login: existsUser.login,
-      },
-    };
-  }
-
   async updateUser(id: number, dto: UpdateUserDTO) {
     const existsUser = await this.prisma.users.findUnique({
       where: {
@@ -124,7 +102,7 @@ export class UsersService {
       }
     }
 
-    await this.prisma.users.update({
+    const updatedUser = await this.prisma.users.update({
       where: {
         id,
       },
@@ -136,6 +114,14 @@ export class UsersService {
     });
     return {
       message: 'Пользователь успешно изменён',
+      user: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        login: updatedUser.login,
+        createdAt: updatedUser.createdAt,
+        updatedAt: updatedUser.updatedAt,
+      },
     };
   }
 

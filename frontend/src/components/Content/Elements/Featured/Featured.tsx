@@ -1,14 +1,15 @@
+import { useGetProductsQuery } from '@/redux/getProducts/api';
+import type { ProductType } from '@/redux/getProducts/types';
 import { formatNumber } from '@/utils/formatNumbers';
-import { OnClickAddToCart } from '@/utils/onClickAddToCart';
 import { Link } from 'react-router-dom';
 import styles from './Featured.module.scss';
-import type { ProductType } from '@/redux/getProducts/types';
-import { useGetProductsQuery } from '@/redux/getProducts/api';
+import { useAddToCart } from '@/utils/customHooks/useAddToCart';
 
 const Featured = () => {
-	const { data: products } = useGetProductsQuery();
-
+	const { data } = useGetProductsQuery({});
+	const products = data?.items;
 	const findProducts = products?.filter(item => item.featured);
+	const handleAddToCart = useAddToCart();
 
 	return (
 		<div className={styles.products__aside_featured}>
@@ -32,7 +33,7 @@ const Featured = () => {
 							<div className={styles.products__featured_rate}></div>
 							<div
 								className={styles.products__featured_button}
-								onClick={() => OnClickAddToCart(product)}
+								onClick={() => handleAddToCart(product)}
 							>
 								В корзину
 							</div>

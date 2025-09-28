@@ -3,6 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
+  ParseArrayPipe,
+  ParseIntPipe,
   Post,
   Query,
   Req,
@@ -18,7 +21,19 @@ import { FeedbackDTO } from './feedback.dto';
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  @Post('add')
+  @Get()
+  @ApiOperation({ summary: 'Получение всех отзывов' })
+  @ApiResponse({
+    status: 200,
+    description: 'Отзывы успешно получены',
+  })
+  getFeedbacks(@Query('userId') userId: string) {
+    return this.feedbackService.getFeedbacks(userId ? +userId : null);
+  }
+
+  // ------------------------------------------------
+
+  @Post()
   @ApiOperation({ summary: 'Добавление нового отзыва' })
   @ApiResponse({
     status: 200,
@@ -37,37 +52,7 @@ export class FeedbackController {
 
   // ------------------------------------------------
 
-  @Get('get')
-  @ApiOperation({ summary: 'Получение всех отзывов текущего пользователя' })
-  @ApiResponse({
-    status: 200,
-    description: 'Отзывы успешно получены',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Пользователь не авторизован',
-  })
-  @UseGuards(JwtAuthGuard)
-  getFeedbacks(@Req() request) {
-    const userId = request.user.id;
-    return this.feedbackService.getFeedbacks(userId);
-  }
-
-  // ------------------------------------------------
-
-  @Get('getAll')
-  @ApiOperation({ summary: 'Получение всех отзывов (публичный маршрут)' })
-  @ApiResponse({
-    status: 200,
-    description: 'Отзывы успешно получены',
-  })
-  getFeedbacksAll() {
-    return this.feedbackService.getFeedbacksAll();
-  }
-
-  // ------------------------------------------------
-
-  @Delete('delete')
+  @Delete(':id')
   @ApiOperation({ summary: 'Удаление текущего отзыва' })
   @ApiResponse({
     status: 200,
@@ -78,8 +63,8 @@ export class FeedbackController {
     description: 'Отзыв не найден',
   })
   @UseGuards(JwtAuthGuard)
-  deleteFeedback(@Query('feedbackId') feedbackId: string, @Req() request) {
-    const user = request.user.id;
-    return this.feedbackService.deleteFeedback(user, feedbackId);
+  deleteFeedback(@Param('id', ParseIntPipe) id: number, @Req() request) {
+    const userId = request.user.id;
+    return this.feedbackService.deleteFeedback(id, userId);
   }
 }

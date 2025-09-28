@@ -20,8 +20,10 @@ const SliderHot = () => {
 		infinite: true,
 	};
 
-	const { data: productsAll } = useGetProductsQuery();
+	const { data } = useGetProductsQuery({});
 	const { isLogged } = useSelector(SelectAuth);
+
+	const productsAll = data?.items;
 
 	const findProducts = productsAll
 		? productsAll?.filter(item => {

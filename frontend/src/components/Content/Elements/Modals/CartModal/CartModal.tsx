@@ -7,12 +7,16 @@ import { Link } from 'react-router-dom';
 import AddToCartCalcform from '../../Buttons/AddToCartCalcform';
 import DeleteFromCartBtn from '../../Buttons/DeleteFromCartBtn';
 import styles from './CartModal.module.scss';
+import { useGetCartQuery } from '@/redux/cart/api';
+import type { ProductInCart } from '@/redux/cart/types';
 
 const CartModal: React.FC = () => {
 	const dispatch = useAppDispatch();
-	const { productsInCart, cartModalStatus } = useSelector(SelectCart);
+	const { cartModalStatus } = useSelector(SelectCart);
 	const url = typeof window !== 'undefined' ? window.location.href : '';
 	const urlPathCartPage = url.includes('cart');
+	const { data } = useGetCartQuery();
+	const productsInCart = data?.cart || [];
 
 	useEffect(() => {
 		dispatch(setCartModalStatus(false));
@@ -36,7 +40,7 @@ const CartModal: React.FC = () => {
 			<div className={styles.cartModal__content}>
 				<div className={`${styles.cartModal__close} dismiss`}></div>
 				<div className={styles.cartModal__items}>
-					{productsInCart.map((item: any, index) => (
+					{productsInCart?.map((item: ProductInCart, index: number) => (
 						<div className={styles.cartModal__item} key={index}>
 							<img
 								className={styles.cartModal__item_image}

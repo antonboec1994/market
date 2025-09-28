@@ -4,33 +4,33 @@ import { Checkbox, FormControlLabel, FormGroup } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import RequestError from '@/components/Content/Elements/RequestError/RequestError';
 import { Success } from '@/errors';
-import { deleteAccount } from '@/redux/auth/thunks';
 import { useForm } from 'react-hook-form';
 import styles from '../../../Elements/Modals/AuthModals/AuthModal.module.scss';
+import { useDeleteAccountMutation } from '@/redux/auth/api';
+import { useSelector } from 'react-redux';
+import { SelectAuth } from '@/redux/auth/selectors';
 
 const DeleteAccount = () => {
 	const dispatch = useAppDispatch();
-
 	const { handleSubmit } = useForm({});
+	const [deleteAccount] = useDeleteAccountMutation();
+	const { userData } = useSelector(SelectAuth);
+
+	const userId = userData?.user.id;
 
 	const onSubmit = async () => {
 		dispatch(setRequestError(''));
+		if (!userId) return;
 		try {
-			const res = await dispatch(deleteAccount());
-			if ('error' in res) {
-				const errorMessage = res.payload || res.error.message;
-				dispatch(setRequestError(errorMessage));
-			} else {
-				dispatch(setRequestError(Success.successDeleteUser));
-				dispatch(logout());
-				localStorage.removeItem('user');
-				setTimeout(() => {
-					window.location.href = '/';
-					dispatch(setRequestError(''));
-				}, 2000);
-			}
-		} catch (error) {
-			dispatch(setRequestError('Произошла ошибка при удалении аккаунта'));
+			await deleteAccount(userId).unwrap();
+			dispatch(setRequestError(Success.successDeleteUser));
+			dispatch(logout());
+		} catch (error: any) {
+			dispatch(
+				setRequestError(
+					error.message || 'Произошла ошибка при удалении аккаунта'
+				)
+			);
 		}
 	};
 

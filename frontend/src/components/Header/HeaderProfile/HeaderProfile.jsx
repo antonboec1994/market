@@ -13,7 +13,9 @@ import styles from '../Header.module.scss';
 const HeaderProfile = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const { user, isLogged } = useSelector(SelectAuth);
+	const { userData, isLogged } = useSelector(SelectAuth);
+
+	const user = userData?.user;
 
 	const Register = () => {
 		dispatch(setRegisterModalStatus(true));
@@ -25,9 +27,7 @@ const HeaderProfile = () => {
 
 	const Logout = () => {
 		dispatch(logout());
-		localStorage.removeItem('user');
 		navigate('/');
-		window.location.reload();
 	};
 
 	return (

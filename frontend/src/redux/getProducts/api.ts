@@ -2,8 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type {
 	FetchProductsArgs,
 	ProductsErrorResponse,
-	ProductsFilteredResponse,
-	ProductType,
+	ProductsResponse,
 } from './types';
 import { API_URL } from '@/consts/apiUrl';
 import { filtersSlice } from '../filters/slice';
@@ -13,22 +12,7 @@ export const getProductsApi = createApi({
 	baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
 	tagTypes: ['Products'],
 	endpoints: build => ({
-		getProducts: build.query<ProductType[], void>({
-			query: () => `/products/getAll`,
-			transformErrorResponse: (response: ProductsErrorResponse) => ({
-				status: response.status,
-				message:
-					response.data.message ||
-					'Произошла ошибка при загрузке данных продукты',
-			}),
-			providesTags: ['Products'],
-			keepUnusedDataFor: 600,
-		}),
-
-		getProductsByFilter: build.query<
-			ProductsFilteredResponse,
-			FetchProductsArgs
-		>({
+		getProducts: build.query<ProductsResponse, FetchProductsArgs>({
 			query: params => {
 				const hasValue = (val: any) => val !== undefined && val !== null;
 				const {
@@ -61,7 +45,7 @@ export const getProductsApi = createApi({
 				}
 				const queryString =
 					queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-				return `/products/get${queryString}`;
+				return `/products${queryString}`;
 			},
 			transformErrorResponse: (response: ProductsErrorResponse) => ({
 				status: response.status,
@@ -82,5 +66,4 @@ export const getProductsApi = createApi({
 	}),
 });
 
-export const { useGetProductsQuery, useGetProductsByFilterQuery } =
-	getProductsApi;
+export const { useGetProductsQuery } = getProductsApi;

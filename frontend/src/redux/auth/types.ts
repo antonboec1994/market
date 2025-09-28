@@ -1,28 +1,29 @@
-import type { FeedbacksType } from '../getFeedbacks/types';
-
 export interface AuthSliceState {
-	user: User;
+	userData: UserData | null;
 	isLogged: boolean;
 	registerModalStatus: boolean;
 	loginModalStatus: boolean;
 	requestError: string;
-	isLoading: boolean;
-	createdDate: string;
-	createdTime: string;
-	updatedDate: string;
-	updatedTime: string;
 }
 
-export type User = {
-	user: any;
-	id: number;
-	name: string;
-	login: string;
-	email: string;
-	createdAt: string;
-	updatedAt: string;
-	feedback: [FeedbacksType];
-	access_token?: string;
+export type UserData = {
+	access_token: string;
+	message: string;
+	user: {
+		createdAt: string;
+		email: string;
+		id: number;
+		login: string;
+		name: string;
+		updatedAt: string;
+	};
+};
+
+export type UserErrorResponse = {
+	status: number;
+	data: {
+		message: string;
+	};
 };
 
 export interface ILoginData {
@@ -37,9 +38,13 @@ export interface IRegisterData {
 	password: string;
 }
 
-export type UserErrorResponse = {
-	status: number;
-	data: {
-		message: string;
-	};
-};
+export interface IUpdateUserData {
+	email: string;
+	name: string;
+	login: string;
+}
+
+export interface IUpdateUserPassword {
+	oldPassword: string;
+	newPassword: string;
+}

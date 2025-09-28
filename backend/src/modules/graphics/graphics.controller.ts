@@ -7,7 +7,7 @@ import { GraphicService } from './graphics.service';
 export class GraphicController {
   constructor(private readonly GraphicService: GraphicService) {}
 
-  @Get('get')
+  @Get()
   @ApiOperation({ summary: 'Получить все графики' })
   @ApiResponse({ status: 200, description: 'Список графиков' })
   async getAll() {

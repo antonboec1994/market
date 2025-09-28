@@ -8,7 +8,7 @@ export const getGraphicsApi = createApi({
 	tagTypes: ['Graphics'],
 	endpoints: build => ({
 		getGraphics: build.query<GraphicType[], void>({
-			query: () => `/graphics/get`,
+			query: () => `/graphics`,
 			transformErrorResponse: (response: GraphicsErrorResponse) => ({
 				status: response.data,
 				message:

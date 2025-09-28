@@ -27,8 +27,9 @@ type LineCharProps = {
 };
 
 const LineChart: React.FC<LineCharProps> = ({ array }) => {
-	const array0Values = JSON.parse(array[0].values);
-	const array1Values = JSON.parse(array[1].values);
+	if (!array) return <div>Данных нет</div>;
+	const array0Values = array[0].values ? JSON.parse(array[0].values) : [];
+	const array1Values = array[1].values ? JSON.parse(array[1].values) : [];
 
 	const options = {
 		responsive: true,

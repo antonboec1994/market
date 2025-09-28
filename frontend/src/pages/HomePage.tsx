@@ -5,9 +5,9 @@ import Blog from '../components/Content/Blocks/Blog/Blog';
 import Brands from '../components/Content/Blocks/Brands/Brands';
 import Gallery from '../components/Content/Blocks/Gallery/Gallery';
 import Offers from '../components/Content/Blocks/Offers/Offers';
-import Feedback from '../components/Content/Blocks/Sliders/FeedbacksSlider/FeedbacksSlider';
 import Sliders from '../components/Content/Blocks/Sliders/Sliders';
 import { useEffect } from 'react';
+import FeedbacksSlider from '../components/Content/Blocks/Sliders/FeedbacksSlider/FeedbacksSlider';
 
 const HomePage = () => {
 	const dispatch = useAppDispatch();
@@ -24,7 +24,7 @@ const HomePage = () => {
 			<Gallery />
 			<Blog />
 			<Brands />
-			<Feedback />
+			<FeedbacksSlider />
 		</>
 	);
 };

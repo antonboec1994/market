@@ -11,7 +11,7 @@ export const instanceCart = axios.create({
 	baseURL: `${API_URL}/cart`,
 });
 instanceCart.interceptors.request.use(config => {
-	const user = localStorage.getItem('user');
+	const user = localStorage.getItem('userData');
 	const token = user ? JSON.parse(user)?.access_token : '';
 	config.headers.Authorization = `Bearer ${token}`;
 	return config;
@@ -21,7 +21,7 @@ export const instanceUsers = axios.create({
 	baseURL: `${API_URL}/users`,
 });
 instanceUsers.interceptors.request.use(config => {
-	const user = localStorage.getItem('user');
+	const user = localStorage.getItem('userData');
 	const token = user ? JSON.parse(user)?.access_token : '';
 	config.headers.Authorization = `Bearer ${token}`;
 	return config;
@@ -31,7 +31,7 @@ export const instanceFeedbacks = axios.create({
 	baseURL: `${API_URL}/feedbacks`,
 });
 instanceFeedbacks.interceptors.request.use(config => {
-	const user = localStorage.getItem('user');
+	const user = localStorage.getItem('userData');
 	const token = user ? JSON.parse(user)?.access_token : '';
 	config.headers.Authorization = `Bearer ${token}`;
 	return config;

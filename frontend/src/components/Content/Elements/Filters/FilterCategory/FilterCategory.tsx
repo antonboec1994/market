@@ -1,12 +1,14 @@
 import { categoriesList } from '@/redux/filters/consts';
 import { setActiveCategory, setCurrentPage } from '@/redux/filters/slice';
+import { useGetProductsQuery } from '@/redux/getProducts/api';
 import { useDispatch } from 'react-redux';
 import styles from './FilterCategory.module.scss';
-import { useGetProductsQuery } from '@/redux/getProducts/api';
 
 const FilterCategory: React.FC = () => {
 	const dispatch = useDispatch();
-	const { data: products } = useGetProductsQuery();
+	const { data } = useGetProductsQuery({});
+
+	const products = data?.items;
 
 	const countOfItemsInCategory = (index: number) => {
 		return products?.reduce((count, item) => {
